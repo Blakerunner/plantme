@@ -1,28 +1,38 @@
-const DB = require("../db/dbConnect");
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('mysql');
+const { DB } = require("../db/dbConnect");
+const { Sequelize, DataTypes } = require("sequelize");
 
-const Plant = sequelize.define('Plant', {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
+const Plant = DB.define("Plant", {
   name: {
-    type: DataTypes.STRING
-  }
-}, {
-  // Other model options go here
+    type: DataTypes.STRING,
+  },
 });
 
-Plant.getAll = (result) => {
-  Plant.findAll = () => {
-    if (err) {
-      console.log("Plant.getAll error: ", err);
-      result(null, err);
-      return;
-    }
-    result(null, res);
-  };
+Plant.seed = async () => {
+  await Plant.sync({ force: true });
+  console.log("The table for the Plant model was just (re)created!");
+  await Plant.bulkCreate([
+    { name: "beefsteak tomatoe" },
+    { name: "sun gold cherry tomatoe" },
+    { name: "brandywine tomatoe" },
+    { name: "roma tomatoe" },
+  ])
+    .then((plants) => {
+      return plants;
+    })
+    .catch((err) => {
+      return `Error: ${err}`;
+    });
+};
+
+Plant.getAll = async () => {
+  console.log("Getting plants from the Plant table.");
+  await Plant.findAll()
+    .then((plants) => {
+      return plants;
+    })
+    .catch((err) => {
+      return `Error: ${err}`;
+    });
 };
 
 module.exports = {

@@ -1,6 +1,9 @@
+const { Sequelize } = require("sequelize");
+const MYSQL_DATABASE = process.env.MYSQL_DATABASE || "plantme"
+
 // Connect to database via Sequelize ORM
 const DB = new Sequelize(
-  process.env.MYSQL_DATABASE || "plantme",
+  MYSQL_DATABASE,
   process.env.MYSQL_USER || "root",
   process.env.MYSQL_PASSWORD || "",
   {
@@ -9,12 +12,13 @@ const DB = new Sequelize(
   }
 );
 
+// Confirm connection to database.
 try {
-  await DB.authenticate();
-  console.log(`Database connected successful: ${process.env.MYSQL_DATABASE}`);
+  DB.authenticate();
+  console.log(`Database connected successful: ${MYSQL_DATABASE}`);
 } catch (error) {
   console.error(
-    `Unable to connect to the database: ${process.env.MYSQL_DATABASE}`,
+    `Unable to connect to the database: ${MYSQL_DATABASE}`,
     error
   );
 }
