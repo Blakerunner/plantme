@@ -1,5 +1,4 @@
 ---
 deployment:
   tasks:
-    - export CLIENT_DEPLOYPATH=/home/blakerun/plantme.blakerunner.com/
-    - /bin/cp -R client $CLIENT_DEPLOYPATH
+    - /bin/cp -R client /home/blakerun/plantme.blakerunner.com/
