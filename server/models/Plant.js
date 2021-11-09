@@ -35,6 +35,17 @@ Plant.getAll = async () => {
     });
 };
 
+Plant.addPlant = async (plant) => {
+  console.log("Creating new Plant:", plant);
+  await Plant.create(plant)
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      return `Error: ${err}`;
+    });
+};
+
 module.exports = {
   Plant,
 };
