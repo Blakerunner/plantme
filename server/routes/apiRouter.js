@@ -9,7 +9,7 @@ apiRouter.get("/", apiController.getAll);
 apiRouter.get("/seed", apiController.seed);
 
 // Create new plant
-//apiRouter.post("/create", apiController.create);
+apiRouter.post("/create", apiController.addPlant);
 
 module.exports = {
   apiRouter,
