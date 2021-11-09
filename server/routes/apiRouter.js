@@ -4,8 +4,12 @@ const apiController = require("../controllers/apiController");
 
 // Get all plants
 apiRouter.get("/", apiController.getAll);
+
+// Seed plants table
+apiRouter.get("/seed", apiController.seed);
+
 // Create new plant
-apiRouter.post("/create", apiController.create);
+//apiRouter.post("/create", apiController.create);
 
 module.exports = {
   apiRouter,

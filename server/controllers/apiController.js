@@ -1,11 +1,27 @@
 const { Plant } = require("../models/Plant");
 
+// getAll
 exports.getAll = (req, res) => {
-  Plant.getAll((err, data) => {
-    if (err)
+  Plant.findAll()
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
       res.status(500).send({
-        message: "Error: failed to get all scores.",
+        message: err,
       });
-    else res.send(data);
-  });
+    });
+};
+
+// seed
+exports.seed = (req, res) => {
+  Plant.seed()
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err,
+      });
+    });
 };
