@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-const { apiRouter } = require("./routes/apiRouter");
+const { userRouter } = require("./routes/userRouter");
+const { adminRouter } = require("./routes/adminRouter");
 
 // ****** DOTENV ******
 require("dotenv").config();
@@ -21,7 +22,8 @@ app.use((req, res, next) => {
 });
 
 // ****** ROUTES ******
-app.use("/api/v1/", apiRouter);
+app.use("/api/v1/user/", userRouter);
+app.use("/api/v1/admin/", adminRouter);
 
 // ****** SERVER LAUNCH ******
 const PORT = process.env.PORT || 8080;

@@ -1,5 +1,6 @@
 const { DB } = require("../db/dbConnect");
 const { Sequelize, DataTypes } = require("sequelize");
+const { plantData } = require("../data/plantData");
 
 const Plant = DB.define("Plant", {
   name: {
@@ -10,12 +11,7 @@ const Plant = DB.define("Plant", {
 Plant.seed = async () => {
   await Plant.sync({ force: true });
   console.log("The table for the Plant model was just (re)created!");
-  await Plant.bulkCreate([
-    { name: "beefsteak tomatoe" },
-    { name: "sun gold cherry tomatoe" },
-    { name: "brandywine tomatoe" },
-    { name: "roma tomatoe" },
-  ])
+  await Plant.bulkCreate(plantData)
     .then((plants) => {
       return plants;
     })
