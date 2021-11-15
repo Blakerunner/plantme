@@ -18,8 +18,25 @@
 
         <!-- Main -->
         <div class="container-fluid col-6 text-center">
-          <h1 class="display-1">Index</h1>
+          <h1 class="display-1">Admin</h1>
         </div>
+
+        <div class="container-fluid col-6 my-4">
+          <div><h4>Stats</h4></div>
+      <div name="responseDiv">
+        <table name="responseTable" class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Method</th>
+              <th scope="col">Endpoint</th>
+              <th scope="col">Requests</th>
+            </tr>
+          </thead>
+          <tbody id="response_table_body">
+          </tbody>
+        </table>
+      </div>
 
         <!-- Scripts -->
         <script
@@ -28,7 +45,7 @@
           crossorigin="anonymous"
         ></script>
         <script type="" src="./js/navbar.js"></script>
-        <script type="" src="./js/indexUtils.js"></script>
+        <script type="" src="./js/adminUtils.js"></script>
       </body>
     </html>
   </body>

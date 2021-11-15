@@ -1,19 +1,17 @@
 //const domain = "https://plantme.blakerunner/";
 const domain = "http://localhost:8080/";
-const endPointRoot = "/api/v1";
+const endPointRoot = "api/v1/user";
 
 const addRow = (data, rowCounter, responseTable) => {
     let newRow = `<tr>
       <th scope="row">${rowCounter}</th>
       <td>${data.name}</td>
-      <td>${data.score}</td>
     </tr>`;
     responseTable.innerHTML += newRow;
 };
 
 // Functions
-// Read from DB
-const readDB = () => {
+const readPlants = () => {
   let url = new URL(domain + endPointRoot);
   fetch(url)
     .then((response) => response.json())
@@ -31,4 +29,4 @@ const readDB = () => {
 };
 
 // Listener
-document.addEventListener("DOMContentLoaded", readDB);
+document.addEventListener("DOMContentLoaded", readPlants);
