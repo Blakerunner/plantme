@@ -1,7 +1,7 @@
 document.getElementById("navhead").innerHTML = `
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand m-1 h1" href="./index.html">BnT Lab 5</a>
+      <a class="navbar-brand m-1 h1" href="./index.html">PlantMe</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -13,6 +13,12 @@ document.getElementById("navhead").innerHTML = `
           <a class="nav-link ${
             window.location.pathname == "/login.html" ? "active" : ""
           }" href="./login.html">Login</a>
+          <a class="nav-link ${
+            window.location.pathname == "/user.html" ? "active" : ""
+          }" href="./user.html">User</a>
+          <a class="nav-link ${
+            window.location.pathname == "/admin.html" ? "active" : ""
+          }" href="./admin.html">Admin</a>
         </div>
       </div>
     </div>
