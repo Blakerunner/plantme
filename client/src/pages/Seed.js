@@ -1,5 +1,7 @@
 import React from 'react';
 
-const Seed = () => {};
+const Seed = () => {
+    return <p>hi</p>
+};
 
 export default Seed;

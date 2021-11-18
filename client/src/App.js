@@ -1,23 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import './App.css';
+import React from "react";
+import { Route, Switch } from "react-router-dom";
+import "./App.css";
 
-import Home from './pages/Home';
-import Seed from './pages/Seed';
+import PrivateRoute from "./routing/PrivateRoute";
+import Home from "./pages/Home";
+import Seed from "./pages/Seed";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
+import About from "./pages/About";
+import Plants from "./pages/Plants";
+
 
 const App = () => {
-  const [isLoggedIn, setLoggedIn] = useState(false);
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      setLoggedIn(true);
+  const isAuthenticated = () => {
+    const token = localStorage.getItem('plantme_token');
+    try {
+      if (token) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    } catch (error) {
+      return false;
     }
-  }, [isLoggedIn]);
+  }
+
   return (
     <main>
       <Switch>
-        <Route path='/' component={Home} isLoggedIn={isLoggedIn} exact />
-        <Route path='/seed' component={Seed} isLoggedIn={isLoggedIn} exact />
+        <PrivateRoute path="/" component={Home} isAuthenticated={isAuthenticated} exact />
+        <Route path="/login" component={Login} exact isAuthenticated={isAuthenticated} />
+        <Route path="/about" component={About} exact />
+        <PrivateRoute path="/plants" component={Plants} isAuthenticated={isAuthenticated} />
+        <PrivateRoute path="/seed" component={Seed} isAuthenticated={isAuthenticated} exact />
+        <Route path="/register" component={Register} exact />
       </Switch>
     </main>
   );

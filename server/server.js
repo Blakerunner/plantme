@@ -7,7 +7,7 @@ require("dotenv").config();
 
 // ****** MIDDLEWEAR ******
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({ extended: false }));
 
 // ****** CORS ******
 app.use((req, res, next) => {
@@ -22,6 +22,8 @@ app.use((req, res, next) => {
 
 // ****** ROUTES ******
 app.use("/api/v1/", apiRouter);
+app.use('/api/v1/users', require('./routes/users'));
+app.use('/api/v1/auth', require('./routes/auth'));
 
 // ****** SERVER LAUNCH ******
 const PORT = process.env.PORT || 8080;
