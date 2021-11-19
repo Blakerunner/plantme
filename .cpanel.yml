@@ -3,4 +3,4 @@ deployment:
   tasks:
     - export CLIENT_PATH=/home/blakerun/plantme.blakerunner.com/
     - export SERVER_PATH=/home/blakerun/plantme.blakerunner.com/
-    - /bin/cp -r /home/blakerun/repositories/plantme/client/* $CLIENT_PATH
+    - /bin/cp -R ./client/* $CLIENT_PATH
