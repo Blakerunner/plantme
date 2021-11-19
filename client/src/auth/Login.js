@@ -1,14 +1,19 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { firebaseConfig } from './firebase.config';
 import "../login.css";
-import { Redirect } from "react-router-dom";
-// import TopNavLogin from "../components/nav-bars/topNavLogin";
+import { Redirect, useHistory } from "react-router-dom";
 
 firebase.initializeApp(firebaseConfig);
 
-const Login = ({ props, isLoggedIn }) => {
+const endpoint = "http://localhost:8080";
+
+const Login = ({ isAuthenticated: isAuthenticated }) => {
+
+  const history = useHistory();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
@@ -17,20 +22,26 @@ const Login = ({ props, isLoggedIn }) => {
   const [staySignedIn, setStaySignedIn] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      props.history.push('/');
+    if (sessionStorage.getItem("plantme_token") || localStorage.getItem("plantme_token")) {
+      history.push('/')
     }
-  });
+  }, [])
 
   const checkValidity = () => {
     if (!email.includes("@")) {
       setIsEmailValid(false);
+    } else {
+      setIsEmailValid(true);
     }
     if (email.replace(' ', '') === '' || email === undefined) {
       setEmptyEmail(true);
+    } else {
+      setEmptyEmail(false);
     }
     if (password.replace(' ', '') === '' || password === undefined) {
       setEmptyPassword(true);
+    } else {
+      setEmptyPassword(false);
     }
   }
 
@@ -56,6 +67,7 @@ const Login = ({ props, isLoggedIn }) => {
           window.alert("Account doesn't exist");
         }
         const token = user.getIdToken();
+
         token.then((result) => {
           if (staySignedIn) {
             localStorage.setItem('plantme_token', result);
@@ -63,7 +75,36 @@ const Login = ({ props, isLoggedIn }) => {
             sessionStorage.setItem('plantme_token', result);
           }
 
+          // history.push("/");
           window.location.reload();
+
+          // try {
+          //   const { data } = axios.post(
+          //     endpoint + "/api/v1/auth",
+          //     {
+          //       email: email,
+          //       password: password,
+          //     }
+          //   );
+
+          //   const { token, isAdmin } = data;
+          //   if (localStorage.getItem("plantme_token")) {
+          //     localStorage.removeItem("plantme_token");
+          //   }
+
+          //   if (localStorage.getItem("isAdmin")) {
+          //     localStorage.removeItem("isAdmin");
+          //   }
+          //   localStorage.setItem("plantme_token", token);
+          //   localStorage.setItem("isAdmin", isAdmin);
+
+          //   history.push("/");
+          // } catch (error) {
+          //   localStorage.removeItem("plantme_token");
+          //   localStorage.removeItem("isAdmin");
+          //   alert("Credential Invalid");
+          // }
+
         })
       }).catch((error) => {
         console.log(error);
@@ -73,7 +114,7 @@ const Login = ({ props, isLoggedIn }) => {
     }
   };
 
-  if (localStorage.getItem("plantme_token")) {
+  if (isAuthenticated) {
     return <Redirect to="/" />;
   } else {
     return (

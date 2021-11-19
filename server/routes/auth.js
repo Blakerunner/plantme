@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const auth = require('../middleware/auth');
 const { check, validationResult } = require('express-validator');
-
+const StatReport = require('../StatReport');
 const User = require('../models/User');
 
 // @route      GET api/auth
@@ -74,5 +74,13 @@ router.post(
         }
     }
 );
+
+// @Route       GET api/v1/auth/stats
+// @desc        get all stats of the user
+// @access      Private
+router.get('/stats', auth, (req, res) => {
+
+    res.status(200).json(StatReport.statsObj);
+});
 
 module.exports = router;

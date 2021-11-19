@@ -39,14 +39,14 @@
   transform-origin: bottom left;
 }
 
-.features {
+.admin {
   display: inline-block;
   position: relative;
   color: #868686;
   margin-right: 20px;
 }
 
-.features:after {
+.admin:after {
   content: '';
   position: absolute;
   width: 100%;
@@ -59,7 +59,7 @@
   transition: transform 0.20s ease-out;
 }
 
-.features:hover:after {
+.admin:hover:after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }

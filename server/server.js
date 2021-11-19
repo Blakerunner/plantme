@@ -1,6 +1,10 @@
 const express = require("express");
 const app = express();
 const { apiRouter } = require("./routes/apiRouter");
+import users from "./routes/users"
+import auth from "./routes/auth"
+import plants from "./routes/plants"
+import seeds from "./routes/seeds"
 
 // ****** DOTENV ******
 require("dotenv").config();
@@ -22,8 +26,10 @@ app.use((req, res, next) => {
 
 // ****** ROUTES ******
 app.use("/api/v1/", apiRouter);
-app.use('/api/v1/users', require('./routes/users'));
-app.use('/api/v1/auth', require('./routes/auth'));
+app.use('/api/v1/user', users);
+app.use('/api/v1/auth', auth);
+app.use('/api/v1/plants', plants);
+app.use('/api/v1/seeds', seeds);
 
 // ****** SERVER LAUNCH ******
 const PORT = process.env.PORT || 8080;

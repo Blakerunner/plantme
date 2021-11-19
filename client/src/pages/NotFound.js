@@ -1,9 +1,10 @@
 import React from "react";
-import Button from 'react-bootstrap/Button'
 import { useHistory } from "react-router-dom";
+import styles from "../styles/landing.module.css";
 
-const About = () => {
+import Button from 'react-bootstrap/Button'
 
+const NotFound = () => {
     const history = useHistory();
 
     const toMainPage = (e) => {
@@ -13,7 +14,7 @@ const About = () => {
 
     return (
         <div>
-            <h3 style={{ padding: '10px' }}>Author: Blake, Jooney, Takashi, Jieun</h3>
+            <h1 className={styles.title}>Not Found</h1>
             <Button
                 variant="secondary"
                 style={{ marginLeft: '10px' }}
@@ -21,8 +22,9 @@ const About = () => {
             >
                 Back to Landing Page
         </Button>
-        </div>
-    )
-}
 
-export default About;
+        </div >
+    );
+};
+
+export default NotFound;

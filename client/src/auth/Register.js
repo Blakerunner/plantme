@@ -3,12 +3,15 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { firebaseConfig } from './firebase.config';
 import "../login.css";
-import { Redirect } from "react-router-dom";
-// import TopNavLogin from "../components/nav-bars/topNavLogin";
+import { Redirect, useHistory } from "react-router-dom";
+import Alert from 'react-bootstrap/Alert'
 
 firebase.initializeApp(firebaseConfig);
 
 const Register = () => {
+
+    const history = useHistory();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -19,6 +22,8 @@ const Register = () => {
     const [emptyPassword, setEmptyPassword] = useState(false);
     console.log(email);
     console.log(password);
+
+    const [onSuccess, setSuccess] = useState(false);
 
     const checkValidity = () => {
         if (!email.includes("@")) {
@@ -72,11 +77,13 @@ const Register = () => {
         try {
             // Create a new user
             await firebase.auth().createUserWithEmailAndPassword(email, password).then((credential) => {
-                const accessToken = credential.getAccessToken();
-                console.log(accessToken);
                 const user = credential.user;
-
                 console.log(user);
+                setSuccess(true);
+                timeout();
+                // <Alert variant='success'>
+                //     Successfully Registered!</Alert>
+                // history.push("/login");
             }).catch((error) => {
                 console.log(error);
             });
@@ -85,53 +92,67 @@ const Register = () => {
         }
     };
 
+    const registerForm =
+        (<form onSubmit={onSubmit}>
+            <div className="input-box">
+                <input
+                    id="username"
+                    type="text"
+                    className="username"
+                    placeholder="Username"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoFocus
+                />
+                <label htmlFor="email">Email</label>
+            </div>
+            <div className="input-box">
+                <input
+                    id="password"
+                    type="password"
+                    className="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <label htmlFor="password">Password</label>
+            </div>
+            <div className='input-box'>
+                <input
+                    type='password'
+                    className='password'
+                    placeholder='Confirm Password'
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                />
+                <label htmlFor='password'>Confirm Password</label>
+            </div>
+            <input
+                type="submit"
+                value="Create Account"
+                onClick={checkValidity}
+            />
+        </form>)
+
+    const sucessMessage = (
+        <Alert variant='success'>
+            Successfully Registered!</Alert>)
+
+    const timeout = () => {
+        setTimeout(() => {
+            history.push("/login")
+        }, 2000);
+    }
+
+
     if (localStorage.getItem("plantme_token")) {
         return <Redirect to="/" />;
     } else {
         return (
             <div>
-                {/* <TopNavLogin /> */}
-                <form onSubmit={onSubmit}>
-                    <div className="input-box">
-                        <input
-                            id="username"
-                            type="text"
-                            className="username"
-                            placeholder="Username"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            autoFocus
-                        />
-                        <label htmlFor="email">Email</label>
-                    </div>
-                    <div className="input-box">
-                        <input
-                            id="password"
-                            type="password"
-                            className="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <label htmlFor="password">Password</label>
-                    </div>
-                    <div className='input-box'>
-                        <input
-                            type='password'
-                            className='password'
-                            placeholder='Confirm Password'
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
-                        <label htmlFor='password'>Confirm Password</label>
-                    </div>
-                    <input
-                        type="submit"
-                        value="Create Account"
-                        onClick={checkValidity}
-                    />
-                </form>
+                {registerForm}
+                {onSuccess ? sucessMessage : null}
             </div>
         );
     }
