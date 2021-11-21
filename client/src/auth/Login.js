@@ -5,32 +5,23 @@ import { useHistory } from "react-router-dom";
 import "./auth.css";
 import Alert from "react-bootstrap/Alert";
 
-const Login = ({ auth: isAuthenticated }) => {
+const Login = () => {
   const history = useHistory();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [staySignedIn, setStaySignedIn] = useState(false);
-  const [justRegistered, setJustRegistered] = useState(null);
   const [loginError, setLoginError] = useState(null);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (
+      localStorage.getItem("plantme_token") ||
+      sessionStorage.getItem("plantme_token")
+    ) {
       history.push("/");
     }
-    if (localStorage.getItem("success_register") === "true") {
-      setJustRegistered(true);
-    }
-    let timer = setTimeout(() => {
-      setJustRegistered(null);
-      localStorage.removeItem("success_register");
-    }, 2000);
-
-    return () => {
-      clearTimeout(timer);
-    };
     // eslint-disable-next-line
-  }, [isAuthenticated]);
+  }, []);
 
   const checkValidity = () => {
     if (!email.includes("@")) {
@@ -79,7 +70,7 @@ const Login = ({ auth: isAuthenticated }) => {
       } else {
         sessionStorage.setItem("plantme_token", token);
       }
-      history.push("/");
+      window.location.reload();
     } catch (error) {
       console.log(error.response.data);
       setLoginError(error.response.data);
@@ -91,9 +82,6 @@ const Login = ({ auth: isAuthenticated }) => {
 
   return (
     <div>
-      {justRegistered ? (
-        <Alert variant="success">Successfully Registered!</Alert>
-      ) : null}
       {loginError ? <Alert variant="danger">{loginError}</Alert> : null}
       {/* <TopNavLogin /> */}
       <form onSubmit={onSubmit}>

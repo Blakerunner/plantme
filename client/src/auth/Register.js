@@ -105,7 +105,6 @@ const Register = () => {
 
   const redirectToLogin = () => {
     history.push("/login");
-    localStorage.setItem("success_register", "true");
   };
 
   const removeInputs = () => {

@@ -32,21 +32,12 @@ const App = () => {
   return (
     <main>
       <Switch>
-        <PrivateRoute path="/" component={Home} isAuthenticated={auth} exact />
-        <Route path="/login" component={Login} isAuthenticated={auth} exact />
+        <PrivateRoute path="/" component={Home} auth={auth} exact />
+        <Route path="/login" component={Login} exact />
         <Route path="/about" component={About} exact />
-        <PrivateRoute
-          path="/plants"
-          component={Plants}
-          isAuthenticated={auth}
-        />
-        <PrivateRoute path="/admin" component={Admin} isAuthenticated={auth} />
-        <PrivateRoute
-          path="/seed"
-          component={Seed}
-          isAuthenticated={auth}
-          exact
-        />
+        <PrivateRoute path="/plants" component={Plants} auth={auth} />
+        <PrivateRoute path="/admin" component={Admin} auth={auth} />
+        <PrivateRoute path="/seed" component={Seed} auth={auth} exact />
         <Route path="/register" component={Register} exact />
         <Route component={NotFound} />
       </Switch>
