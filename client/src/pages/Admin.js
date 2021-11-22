@@ -18,14 +18,17 @@ const Admin = () => {
       setStats(data);
     };
     fetchData();
-  }, []);
+  }, [REACT_APP_SERVER_URL]);
 
   return (
     <>
-      <table style={{ border: "1px solid black" }}>
+      <table style={{ border: "1px solid black", margin: "5px" }}>
         <thead>
           <tr>
             <th style={{ border: "1px solid black", padding: "5px" }}>Route</th>
+            <th style={{ border: "1px solid black", padding: "5px" }}>
+              Endpoint
+            </th>
             <th style={{ border: "1px solid black", padding: "5px" }}>
               Requests
             </th>
@@ -34,9 +37,15 @@ const Admin = () => {
         <tbody>
           {stats.map((stat, idx) => (
             <tr key={idx}>
-              <td style={{ border: "1px solid black" }}>{stat.method}</td>
-              <td style={{ border: "1px solid black" }}>{stat.endpoint}</td>
-              <td style={{ border: "1px solid black" }}>{stat.requests}</td>
+              <td style={{ border: "1px solid black", padding: "5px" }}>
+                {stat.method}
+              </td>
+              <td style={{ border: "1px solid black", padding: "5px" }}>
+                {stat.endpoint}
+              </td>
+              <td style={{ border: "1px solid black", padding: "5px" }}>
+                {stat.requests}
+              </td>
             </tr>
           ))}
         </tbody>

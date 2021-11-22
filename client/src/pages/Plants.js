@@ -16,24 +16,26 @@ const Plants = () => {
       setPlants(data);
     };
     fetchData();
-  }, []);
+  }, [REACT_APP_SERVER_URL]);
 
   return (
     <>
-      <table style={{ border: "1px solid black" }}>
+      <table style={{ border: "1px solid black", margin: "5px" }}>
         <thead>
           <tr>
-            <th style={{ border: "1px solid black", padding: "5px" }}>Route</th>
-            <th style={{ border: "1px solid black", padding: "5px" }}>
-              Requests
-            </th>
+            <th style={{ border: "1px solid black", padding: "5px" }}>Id</th>
+            <th style={{ border: "1px solid black", padding: "5px" }}>Name</th>
           </tr>
         </thead>
         <tbody>
           {plants.map((plant, idx) => (
             <tr key={idx}>
-              <td style={{ border: "1px solid black" }}>{plant.id}</td>
-              <td style={{ border: "1px solid black" }}>{plant.name}</td>
+              <td style={{ border: "1px solid black", padding: "5px" }}>
+                {plant.id}
+              </td>
+              <td style={{ border: "1px solid black", padding: "5px" }}>
+                {plant.name}
+              </td>
             </tr>
           ))}
         </tbody>
