@@ -1,11 +1,14 @@
 const express = require("express");
 const authRouter = express.Router();
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
+// TEMP USERS
 const users = [
   { email: "jieun@gmail.com", password: "123123" },
   { email: "jay@gmail.com", password: "123123" },
   { email: "jagi@gmail.com", password: "123123" },
+  { email: "test@gmail.com", password: "123123" },
 ];
 
 // Register a new user
@@ -42,13 +45,11 @@ authRouter.post("/login", (req, res) => {
 
   // Fetch a user from DB
   try {
-    targetUser = users.filter((user) => user.email === email);
+    targetUser = users.find((user) => user.email === email);
 
-    if (targetUser.length === 0) {
-      return res.status(400).send("User not exist");
+    if (!targetUser) {
+      return res.status(400).send("User does not exist");
     }
-
-    targetUser = targetUser[0];
 
     if (targetUser.password !== password) {
       return res.status(400).send("Invalid credential");
@@ -56,19 +57,17 @@ authRouter.post("/login", (req, res) => {
 
     const token = jwt.sign(
       {
-        email,
+        exp: 60 * 60,
+        data: { email },
       },
-      process.env.JSONWEBTOKEN_SECRET,
-      {
-        expiresIn: "1h",
-      }
+      process.env.JSONWEBTOKEN_SECRET
     );
 
     if (!token) {
-      return res.status(500).send("Internal server error");
+      return res.status(500).send("Internal server error - token");
     }
 
-    return res.status(200).json({ token });
+    return res.status(200).json({ success: true, token });
   } catch (e) {
     return res.status(500).send("Internal server error");
   }

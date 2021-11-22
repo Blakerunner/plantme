@@ -1,42 +1,23 @@
-const { Plant } = require("../models/Plant");
-const { adminController } = require("./adminController")
+const { User } = require("../models/User");
 
-// getAll
-exports.getAll = (req, res) => {
-  Plant.findAll()
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err,
-      });
-    });
+// me
+exports.me = (req, res) => {
+  res.send("me", req.bodyUrl);
 };
 
 // create
 exports.addPlant = (req, res) => {
-  let plant = req.body.plant;
-  if (!plant) {
-    res.status(500).send({
-      message: "plant required to create new Plant",
-    });
-  } else {
-    Plant.addPlant(plant)
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: err,
-        });
-      });
-  }
+  res.send("addPlant", req.bodyUrl);
+};
+
+// delete
+exports.deletePlant = (req, res) => {
+  res.send("deletePlant", req.bodyUrl);
 };
 
 // seed
-exports.seed = (req, res) => {
-  Plant.seed()
+exports.seed = (req, res, next) => {
+  User.seed()
     .then((data) => {
       res.send(data);
     })
@@ -45,4 +26,5 @@ exports.seed = (req, res) => {
         message: err,
       });
     });
+  next();
 };

@@ -3,13 +3,14 @@ import { Route, Switch } from "react-router-dom";
 
 import PrivateRoute from "./routing/PrivateRoute";
 import Home from "./pages/Home";
-import Seed from "./pages/Seed";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import About from "./pages/About";
 import Plants from "./pages/Plants";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+
+require("dotenv").config();
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -37,7 +38,6 @@ const App = () => {
         <Route path="/about" component={About} exact />
         <PrivateRoute path="/plants" component={Plants} auth={auth} />
         <PrivateRoute path="/admin" component={Admin} auth={auth} />
-        <PrivateRoute path="/seed" component={Seed} auth={auth} exact />
         <Route path="/register" component={Register} exact />
         <Route component={NotFound} />
       </Switch>

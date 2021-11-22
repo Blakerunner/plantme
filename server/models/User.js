@@ -1,16 +1,19 @@
 const { DB } = require("../db/dbConnect");
 const { DataTypes } = require("sequelize");
-const { plantData } = require("../data/plantData");
+const { userData } = require("../data/userData");
 
-const Plant = DB.define("Plant", {
-  name: {
+const User = DB.define("User", {
+  username: {
+    type: DataTypes.STRING,
+  },
+  password: {
     type: DataTypes.STRING,
   },
 });
 
-Plant.getAll = async () => {
-  console.log("Getting all plants from the Plant table.");
-  await Plant.findAll()
+User.getAll = async () => {
+  console.log("Getting plants from the Plant table.");
+  await User.findAll()
     .then((data) => {
       return data;
     })
@@ -19,9 +22,9 @@ Plant.getAll = async () => {
     });
 };
 
-Plant.addPlant = async (plant) => {
-  console.log("Creating new Plant:", plant);
-  await Plant.create(plant)
+User.addUser = async (user) => {
+  console.log("Creating new User:", user);
+  await User.create(user)
     .then((data) => {
       return data;
     })
@@ -30,10 +33,10 @@ Plant.addPlant = async (plant) => {
     });
 };
 
-Plant.seed = async () => {
-  await Plant.sync({ force: true });
+User.seed = async () => {
+  await User.sync({ force: true });
   console.log("The table for the Plant model was just (re)created!");
-  await Plant.bulkCreate(plantData)
+  await User.bulkCreate(userData)
     .then((data) => {
       return data;
     })
@@ -43,5 +46,5 @@ Plant.seed = async () => {
 };
 
 module.exports = {
-  Plant,
+  User,
 };
