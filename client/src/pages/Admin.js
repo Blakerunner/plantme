@@ -5,13 +5,15 @@ import { useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
 const Admin = () => {
+  const REACT_APP_SERVER_URL =
+    process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
   const history = useHistory({});
   const [stats, setStats] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/api/v1/admin/endpointStats`
+        `${REACT_APP_SERVER_URL}/api/v1/admin/endpointStats`
       );
       setStats(data);
     };
