@@ -27,11 +27,11 @@ const Login = ({ loginHandler }) => {
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!re.test(String(email).toLowerCase())) {
-      window.alert("Please provide a valid email address");
+      setLoginError("Please provide a valid email address");
       return false;
     }
     if (password.length < 6) {
-      window.alert("Password should be at least 6 characters long");
+      setLoginError("Password should be at least 6 characters long");
       return false;
     }
     if (
@@ -39,7 +39,7 @@ const Login = ({ loginHandler }) => {
       email === undefined ||
       email === null
     ) {
-      window.alert("Please enter email address");
+      setLoginError("Please enter email address");
       return false;
     }
     if (
@@ -47,7 +47,7 @@ const Login = ({ loginHandler }) => {
       password === undefined ||
       password === null
     ) {
-      window.alert("Please enter password");
+      setLoginError("Please enter password");
       return false;
     }
 
