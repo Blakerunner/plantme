@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import "./auth.css";
 import Alert from "react-bootstrap/Alert";
@@ -21,8 +21,7 @@ const Login = () => {
     ) {
       history.push("/");
     }
-    // eslint-disable-next-line
-  }, []);
+  });
 
   const checkValidity = () => {
     if (!email.includes("@")) {
@@ -118,7 +117,7 @@ const Login = () => {
         Stay signed in
       </div>
       <div style={{ textAlign: "center" }}>
-        <a href="/register">Create new account</a>
+        <Link to="/register">Create new account</Link>
       </div>
     </div>
   );
