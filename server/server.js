@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 // const { userRouter } = require("./routes/userRouter");
 // const { adminRouter } = require("./routes/adminRouter");
 // const users = require("./routes/users");
@@ -9,6 +10,7 @@ const { authRouter } = require("./routes/authRouter");
 require("dotenv").config();
 
 // ****** MIDDLEWEAR ******
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }));
 

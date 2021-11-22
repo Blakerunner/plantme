@@ -12,14 +12,19 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [onSuccess, setSuccess] = useState(null);
+  const [message, setMessage] = useState("");
 
   const checkValidity = () => {
-    if (!email.includes("@")) {
-      window.alert("Please provide a valid email address");
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(String(email).toLowerCase())) {
+      setMessage("Please provide a valid email address");
+      setSuccess(false);
       return false;
     }
     if (password.length < 6) {
-      window.alert("Password should be at least 6 characters long");
+      setMessage("Password should be at least 6 characters long");
+      setSuccess(false);
       return false;
     }
     if (
@@ -27,7 +32,8 @@ const Register = () => {
       email === undefined ||
       email === null
     ) {
-      window.alert("Please enter email address");
+      setMessage("Please enter email address");
+      setSuccess(false);
       return false;
     }
     if (
@@ -35,11 +41,13 @@ const Register = () => {
       password === undefined ||
       password === null
     ) {
-      window.alert("Please enter password");
+      setMessage("Please enter password");
+      setSuccess(false);
       return false;
     }
     if (password !== confirmPassword) {
-      window.alert("Passwords don't match");
+      setMessage("Passwords don't match");
+      setSuccess(false);
       return false;
     }
     return true;
@@ -58,6 +66,7 @@ const Register = () => {
       );
       redirectToLogin();
     } catch (error) {
+      setMessage(error.response.data);
       setSuccess(false);
       removeInputs();
     }
@@ -101,7 +110,7 @@ const Register = () => {
     </form>
   );
 
-  const failMessage = <Alert variant="danger">Something went wrong!</Alert>;
+  const failMessage = <Alert variant="danger">{message}</Alert>;
 
   const redirectToLogin = () => {
     history.push("/login");
