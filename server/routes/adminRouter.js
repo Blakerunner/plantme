@@ -3,7 +3,7 @@ const adminRouter = express.Router();
 const adminController = require("../controllers/adminController");
 
 // Get all plants
-adminRouter.get("/endpointStats", adminController.endpointStats);
+adminRouter.get("/endpointStats", adminController.getEndpoint);
 
 // Seed plants table
 adminRouter.get("/seedDatabase", adminController.seedDatabase);

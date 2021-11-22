@@ -3,14 +3,14 @@ const { Plant } = require("../models/Plant");
 const { User } = require("../models/User");
 
 // getAll endpoint stats
-exports.endpointStats = async (req, res) => {
-  await Admin.endpointStats()
+exports.getEndpoint = (req, res) => {
+  Admin.findAll()
     .then((data) => {
       res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
-        message: err,
+        msg: err,
       });
     });
 };
@@ -31,7 +31,7 @@ exports.create = (method, endpoint) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: err,
+        msg: err,
       });
     });
 };

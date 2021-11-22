@@ -8,17 +8,6 @@ const Plant = DB.define("Plant", {
   },
 });
 
-Plant.getAll = async () => {
-  console.log("Getting all plants from the Plant table.");
-  await Plant.findAll()
-    .then((data) => {
-      return data;
-    })
-    .catch((err) => {
-      return `Error: ${err}`;
-    });
-};
-
 Plant.addPlant = async (plant) => {
   console.log("Creating new Plant:", plant);
   await Plant.create(plant)

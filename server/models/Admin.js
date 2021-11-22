@@ -15,17 +15,6 @@ const Admin = DB.define("Admin", {
   },
 });
 
-Admin.endpointStats = () => {
-  console.log("Getting Endpoint Stats");
-  return Admin.findAll()
-    .then((data) => {
-      return data;
-    })
-    .catch((err) => {
-      return `Error: ${err}`;
-    });
-};
-
 Admin.addEndpoint = async (method, endpoint) => {
   console.log("Creating new admin stats:", method, endpoint);
   const values = {

@@ -2,17 +2,17 @@ const { User } = require("../models/User");
 
 // me
 exports.me = (req, res) => {
-  res.send("me", req.bodyUrl);
+  res.send({success: true, msg: req.baseUrl});
 };
 
 // create
 exports.addPlant = (req, res) => {
-  res.send("addPlant", req.bodyUrl);
+  res.send({success: true, msg: req.baseUrl});
 };
 
 // delete
 exports.deletePlant = (req, res) => {
-  res.send("deletePlant", req.bodyUrl);
+  res.send({success: true, msg: req.baseUrl});
 };
 
 // seed

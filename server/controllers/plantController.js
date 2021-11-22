@@ -8,14 +8,14 @@ exports.getAll = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: err,
+        msg: err,
       });
     });
 };
 
 // Get plant by id
 exports.getPlantById = (req, res) => {
-  res.send("getPlantById", req.bodyUrl);
+  res.send({success: true, msg: req.baseUrl});
 };
 
 // Add plant to database
@@ -40,12 +40,12 @@ exports.addPlant = (req, res) => {
 
 // Edit plant
 exports.editPlant = (req, res) => {
-  res.send("editPlant", req.bodyUrl);
+  res.send({success: true, msg: req.baseUrl});
 };
 
 // Delete plant
 exports.deletePlant = (req, res) => {
-  res.send("deletePlant", req.bodyUrl);
+  res.send({success: true, msg: req.baseUrl});
 };
 
 // seed

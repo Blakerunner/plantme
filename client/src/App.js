@@ -10,8 +10,6 @@ import Plants from "./pages/Plants";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
-require("dotenv").config();
-
 const App = () => {
   const [auth, setAuth] = useState({
     isLoading: true,
