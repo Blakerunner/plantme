@@ -8,6 +8,7 @@ const users = [
   { email: "jieun@gmail.com", password: "123123" },
   { email: "jay@gmail.com", password: "123123" },
   { email: "jagi@gmail.com", password: "123123" },
+  { email: "admin@gmail.com", password: "1234abcd" },
 ];
 
 // Register a new user
