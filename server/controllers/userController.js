@@ -1,10 +1,12 @@
 const { Plant } = require("../models/Plant");
-const { adminController } = require("./adminController")
+const { adminController } = require("./adminController");
+const StatReport = require("../StatReport");
 
 // getAll
 exports.getAll = (req, res) => {
   Plant.findAll()
     .then((data) => {
+      StatReport.statsObj["GET:/api/v1/user"]++;
       res.send(data);
     })
     .catch((err) => {
@@ -24,6 +26,7 @@ exports.addPlant = (req, res) => {
   } else {
     Plant.addPlant(plant)
       .then((data) => {
+        StatReport.statsObj["POST:/api/v1/user/create"]++;
         res.send(data);
       })
       .catch((err) => {
@@ -38,6 +41,7 @@ exports.addPlant = (req, res) => {
 exports.seed = (req, res) => {
   Plant.seed()
     .then((data) => {
+      StatReport.statsObj["GET:/api/v1/user/seed"]++;
       res.send(data);
     })
     .catch((err) => {

@@ -1,14 +1,18 @@
 const express = require("express");
 const app = express();
-const { userRouter } = require("./routes/userRouter");
-const { adminRouter } = require("./routes/adminRouter");
+const cors = require("cors");
+// const { userRouter } = require("./routes/userRouter");
+// const { adminRouter } = require("./routes/adminRouter");
+// const users = require("./routes/users");
+const { authRouter } = require("./routes/authRouter");
 
 // ****** DOTENV ******
 require("dotenv").config();
 
 // ****** MIDDLEWEAR ******
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({ extended: false }));
 
 // ****** CORS ******
 app.use((req, res, next) => {
@@ -22,8 +26,9 @@ app.use((req, res, next) => {
 });
 
 // ****** ROUTES ******
-app.use("/api/v1/user/", userRouter);
-app.use("/api/v1/admin/", adminRouter);
+// app.use("/api/v1/user/", userRouter);
+// app.use("/api/v1/admin/", adminRouter);
+app.use("/api/v1/auth/", authRouter);
 
 // ****** SERVER LAUNCH ******
 const PORT = process.env.PORT || 8080;

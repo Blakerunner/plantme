@@ -1,0 +1,80 @@
+.color-nav {
+  background-color: white;
+}
+
+@media only screen and (min-width: 992px) {
+  .plants {
+    display: inline-block;
+    position: relative;
+    color: #868686;
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+}
+
+.plants:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #868686;
+  transform-origin: bottom right;
+  transition: transform 0.2s ease-out;
+}
+
+.plants:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.admin {
+  display: inline-block;
+  position: relative;
+  color: #868686;
+  margin-right: 20px;
+}
+
+.admin:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #868686;
+  transform-origin: bottom right;
+  transition: transform 0.2s ease-out;
+}
+
+.admin:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.aboutUs {
+  display: inline-block;
+  position: relative;
+  color: #868686;
+}
+
+.aboutUs:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #868686;
+  transform-origin: bottom right;
+  transition: transform 0.2s ease-out;
+}
+
+.aboutUs:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
