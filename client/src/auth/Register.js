@@ -7,7 +7,8 @@ import Alert from "react-bootstrap/Alert";
 
 const Register = () => {
   const history = useHistory();
-
+  const REACT_APP_SERVER_URL =
+    process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -52,10 +53,7 @@ const Register = () => {
     const data = { email, password };
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/register`,
-        data
-      );
+      await axios.post(`${REACT_APP_SERVER_URL}/api/v1/auth/register`, data);
       redirectToLogin();
     } catch (error) {
       setSuccess(false);

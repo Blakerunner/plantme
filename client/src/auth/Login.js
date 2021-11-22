@@ -7,7 +7,8 @@ import Alert from "react-bootstrap/Alert";
 
 const Login = () => {
   const history = useHistory();
-
+  const REACT_APP_SERVER_URL =
+    process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [staySignedIn, setStaySignedIn] = useState(false);
@@ -60,7 +61,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/login`,
+        `${REACT_APP_SERVER_URL}/api/v1/auth/login`,
         data
       );
       const token = response.data.token;
