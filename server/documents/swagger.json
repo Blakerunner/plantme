@@ -44,9 +44,7 @@
         },
         "security": [
           {
-            "plant_auth": [
-              "read:plants"
-            ]
+            "api_key": []
           }
         ]
       }
@@ -136,10 +134,7 @@
         },
         "security": [
           {
-            "plant_auth": [
-              "write:plants",
-              "read:plants"
-            ]
+            "api_key": []
           }
         ]
       },
@@ -179,10 +174,7 @@
         },
         "security": [
           {
-            "plant_auth": [
-              "write:plants",
-              "read:plants"
-            ]
+            "api_key": []
           }
         ]
       },
@@ -223,25 +215,13 @@
         },
         "security": [
           {
-            "plant_auth": [
-              "write:plants",
-              "read:plants"
-            ]
+            "api_key": []
           }
         ]
       }
     }
   },
   "securityDefinitions": {
-    "plant_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify plants in your account",
-        "read:pets": "read your plants"
-      }
-    },
     "api_key": {
       "type": "apiKey",
       "name": "api_key",
