@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import "./auth.css";
 import Alert from "react-bootstrap/Alert";
 
-const Login = () => {
+const Login = ({ loginHandler }) => {
   const history = useHistory();
 
   const [email, setEmail] = useState("");
@@ -72,7 +72,8 @@ const Login = () => {
       } else {
         sessionStorage.setItem("plantme_token", token);
       }
-      window.location.reload();
+      loginHandler(true);
+      history.push("/");
     } catch (error) {
       console.log(error.response.data);
       setLoginError(error.response.data);

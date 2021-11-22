@@ -17,6 +17,8 @@ const App = () => {
     isAuthenticated: false,
   });
 
+  const [login, setLogin] = useState(false);
+
   useEffect(() => {
     const local_token = localStorage.getItem("plantme_token");
     const session_token = sessionStorage.getItem("plantme_token");
@@ -25,7 +27,7 @@ const App = () => {
     } else {
       setAuth({ isAuthenticated: false, isLoading: false });
     }
-  }, []);
+  }, [login]);
 
   console.log(auth);
 
@@ -33,7 +35,11 @@ const App = () => {
     <main>
       <Switch>
         <PrivateRoute path="/" component={Home} auth={auth} exact />
-        <Route path="/login" component={Login} exact />
+        <Route
+          path="/login"
+          render={(props) => <Login {...props} loginHandler={setLogin} />}
+          exact
+        />
         <Route path="/about" component={About} exact />
         <PrivateRoute path="/plants" component={Plants} auth={auth} />
         <PrivateRoute path="/admin" component={Admin} auth={auth} />
