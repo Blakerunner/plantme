@@ -9,6 +9,7 @@ import About from "./pages/About";
 import Plants from "./pages/Plants";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import Documentation from "./pages/Documentation";
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -34,6 +35,7 @@ const App = () => {
         <PrivateRoute path="/" component={Home} auth={auth} exact />
         <Route path="/login" component={Login} exact />
         <Route path="/about" component={About} exact />
+        <Route path="/documentation" component={Documentation} exact />
         <PrivateRoute path="/plants" component={Plants} auth={auth} />
         <PrivateRoute path="/admin" component={Admin} auth={auth} />
         <Route path="/register" component={Register} exact />

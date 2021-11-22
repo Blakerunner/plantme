@@ -22,6 +22,9 @@ const topNavHome = () => {
             <Nav.Link as={Link} to="/about" className="aboutUs">
               About Us
             </Nav.Link>
+            <Nav.Link as={Link} to="/documentation" className="documentation">
+              API Documentation
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
