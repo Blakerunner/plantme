@@ -25,6 +25,12 @@ exports.addPlant = (req, res) => {
   }
 };
 
+// Delete plant
+exports.deletePlant = (req, res) => {
+  res.send({success: true, msg: req.baseUrl});
+};
+
+
 // seed
 exports.seed = (req, res, next) => {
   User.seed()

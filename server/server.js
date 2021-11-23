@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const adminController = require("./controllers/adminController");
 const { userRouter } = require("./routes/userRouter");
 const { plantRouter } = require("./routes/plantRouter");
@@ -13,17 +14,6 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }));
-
-// ****** CORS ******
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // to change later with whitelist domains
-  res.header("Access-Control-Allow-Method", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, Content-Length, X-Requested-With"
-  );
-  next();
-});
 
 // ****** TRACK AND UPDATE REQUESTS ******
 app.use(adminController.updateEndpoint);

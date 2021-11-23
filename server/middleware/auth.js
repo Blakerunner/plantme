@@ -12,6 +12,7 @@ const auth = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JSONWEBTOKEN_SECRET);
+    console.log("🚀 ~ file: auth.js ~ line 16 ~ auth ~ decoded", decoded);
     req.email = decoded.email;
     next();
   } catch (err) {

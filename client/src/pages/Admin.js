@@ -14,7 +14,7 @@ const Admin = () => {
     localStorage.getItem("plantme_token") ??
     sessionStorage.getItem("plantme_token");
 
-  const [stats, setStats] = useState({});
+  const [stats, setStats] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +30,11 @@ const Admin = () => {
     };
     fetchData();
   }, [token, REACT_APP_SERVER_URL]);
+
+  const toMainPage = (e) => {
+    e.preventDefault();
+    history.push("/");
+  };
 
   return (
     <>
@@ -64,9 +69,7 @@ const Admin = () => {
       <Button
         variant="secondary"
         style={{ margin: "10px" }}
-        onClick={() => {
-          history.push("/");
-        }}>
+        onClick={(e) => toMainPage(e)}>
         Back
       </Button>{" "}
     </>
