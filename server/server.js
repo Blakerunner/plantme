@@ -10,6 +10,7 @@ const { authRouter } = require("./routes/authRouter");
 require("dotenv").config();
 
 // ****** MIDDLEWEAR ******
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }));
 

@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import "./auth.css";
 import Alert from "react-bootstrap/Alert";
 
-const Login = () => {
+const Login = ({ loginHandler }) => {
   const history = useHistory();
   const REACT_APP_SERVER_URL =
     process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
@@ -24,12 +24,14 @@ const Login = () => {
   });
 
   const checkValidity = () => {
-    if (!email.includes("@")) {
-      window.alert("Please provide a valid email address");
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(String(email).toLowerCase())) {
+      setLoginError("Please provide a valid email address");
       return false;
     }
     if (password.length < 6) {
-      window.alert("Password should be at least 6 characters long");
+      setLoginError("Password should be at least 6 characters long");
       return false;
     }
     if (
@@ -37,7 +39,7 @@ const Login = () => {
       email === undefined ||
       email === null
     ) {
-      window.alert("Please enter email address");
+      setLoginError("Please enter email address");
       return false;
     }
     if (
@@ -45,7 +47,7 @@ const Login = () => {
       password === undefined ||
       password === null
     ) {
-      window.alert("Please enter password");
+      setLoginError("Please enter password");
       return false;
     }
 
@@ -70,7 +72,8 @@ const Login = () => {
       } else {
         sessionStorage.setItem("plantme_token", token);
       }
-      window.location.reload();
+      loginHandler(true);
+      history.push("/");
     } catch (error) {
       console.log(error.response.data);
       setLoginError(error.response.data);

@@ -6,6 +6,7 @@ const { User } = require("../models/User");
 exports.getEndpoint = (req, res) => {
   Admin.findAll()
     .then((data) => {
+      StatReport.statsObj["GET:/api/v1/admin"]++;
       res.send(data);
     })
     .catch((err) => {
@@ -27,6 +28,7 @@ exports.updateEndpoint = (req, res, next) => {
 exports.create = (method, endpoint) => {
   Admin.create(method, endpoint)
     .then((data) => {
+      StatReport.statsObj["GET:/api/v1/admin/seed"]++;
       res.send(data);
     })
     .catch((err) => {

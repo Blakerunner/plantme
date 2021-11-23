@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
 import Button from "react-bootstrap/Button";
 
 const Plants = () => {
@@ -17,6 +16,11 @@ const Plants = () => {
     };
     fetchData();
   }, [REACT_APP_SERVER_URL]);
+
+  const toMainPage = (e) => {
+    e.preventDefault();
+    history.push("/");
+  };
 
   return (
     <>
@@ -43,9 +47,7 @@ const Plants = () => {
       <Button
         variant="secondary"
         style={{ margin: "10px" }}
-        onClick={() => {
-          history.push("/");
-        }}>
+        onClick={(e) => toMainPage(e)}>
         Back
       </Button>{" "}
     </>

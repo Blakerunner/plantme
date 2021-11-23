@@ -2,6 +2,7 @@ const express = require("express");
 const authRouter = express.Router();
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const auth = require("../middleware/auth");
 
 // TEMP USERS
 const users = [
@@ -9,7 +10,7 @@ const users = [
   { email: "jay@gmail.com", password: "123123" },
   { email: "jagi@gmail.com", password: "123123" },
   { email: "test@gmail.com", password: "123123" },
-  { email: "admin@gmail.com", password: "123abc" },
+  { email: "admin@gmail.com", password: "1234abcd" },
 ];
 
 // Register a new user
@@ -19,15 +20,15 @@ authRouter.post("/register", (req, res) => {
   try {
     users.forEach((user) => {
       if (user.email === email) {
-        return res.status(400).json({ msg: "User already exists" });
+        return res.status(400).send("User already exists");
       }
     });
 
     const newUser = { email, password };
     users.push(newUser);
-    return res.status(200).json({ msg: "Register success" });
+    return res.status(200).send("Register success");
   } catch (error) {
-    return res.status(500).json({ msg: "Internal server error" });
+    return res.status(500).send("Internal server error");
   }
 
   // 1. Check if a user exists in DB
@@ -68,7 +69,7 @@ authRouter.post("/login", (req, res) => {
       return res.status(500).send("Internal server error - token");
     }
 
-    return res.status(200).json({ success: true, token });
+    return res.status(200).json({ token });
   } catch (e) {
     return res.status(500).send("Internal server error");
   }
@@ -78,6 +79,12 @@ authRouter.post("/login", (req, res) => {
   // 2. if so, bring the user from DB (SFN)
   // 3. Create a token using jsonwebtoken and username
   // 4. Return the token to client with status code 200
+});
+
+// @Route   GET api/v1/logins/stats
+// @access  Private
+authRouter.get("/stats", auth, (req, res) => {
+  res.status(200).json(StatReport.statsObj);
 });
 
 module.exports = {

@@ -7,22 +7,33 @@ import Button from "react-bootstrap/Button";
 const Admin = () => {
   const REACT_APP_SERVER_URL =
     process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
-  const history = useHistory({});
-  const [stats, setStats] = useState([]);
+
+  const history = useHistory();
+
+  const token =
+    localStorage.getItem("plantme_token") ??
+    sessionStorage.getItem("plantme_token");
+
+  const [stats, setStats] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(
-        `${REACT_APP_SERVER_URL}/api/v1/admin/endpointStats`
+        `${REACT_APP_SERVER_URL}/api/v1/admin/endpointStats`,
+        {
+          headers: {
+            plantme_token: token,
+          },
+        }
       );
       setStats(data);
     };
     fetchData();
-  }, [REACT_APP_SERVER_URL]);
+  }, [token, REACT_APP_SERVER_URL]);
 
   return (
     <>
-      <table style={{ border: "1px solid black", margin: "5px" }}>
+      <table style={{ border: "1px solid black", padding: "5px" }}>
         <thead>
           <tr>
             <th style={{ border: "1px solid black", padding: "5px" }}>Route</th>
