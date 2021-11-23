@@ -1,10 +1,10 @@
 const plantData = [
-    { name: "beefsteak tomatoe" },
-    { name: "sun gold cherry tomatoe" },
-    { name: "brandywine tomatoe" },
-    { name: "roma tomatoe" },
-  ]
-  
+  { name: "beefsteak tomato" },
+  { name: "sun gold cherry tomato" },
+  { name: "brandywine tomato" },
+  { name: "roma tomato" },
+];
+
 module.exports = {
-    plantData,
-}
+  plantData,
+};

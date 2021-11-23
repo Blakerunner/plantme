@@ -1,52 +1,57 @@
 const { Admin } = require("../models/Admin");
-const StatReport = require("../StatReport");
+const { Plant } = require("../models/Plant");
+const { User } = require("../models/User");
 
-// getAll
-exports.getAll = (req, res) => {
+// getAll endpoint stats
+exports.getEndpoint = (req, res) => {
   Admin.findAll()
     .then((data) => {
-      StatReport.statsObj["GET:/api/v1/admin"]++;
       res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
-        message: err,
+        msg: err,
       });
     });
 };
 
-// update
-exports.update = async (req, res, next) => {
-  await Admin.update(req.method, req.baseUrl).catch((err) => {
+// update an endpoint we are tracking
+exports.updateEndpoint = (req, res, next) => {
+  Admin.updateEndpoint(req.method, req.url).catch((err) => {
     console.log("Failed: ", err);
   });
   next();
 };
 
-// create
+// create admin endpoint to track
 exports.create = (method, endpoint) => {
   Admin.create(method, endpoint)
     .then((data) => {
-      StatReport.statsObj["POST:/api/v1/admin/create"]++;
       res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
-        message: err,
+        msg: err,
       });
     });
 };
 
-// seed
-exports.seed = (req, res) => {
-  Admin.seed()
-    .then((data) => {
-      StatReport.statsObj["GET:/api/v1/admin/seed"]++;
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err,
-      });
+// seed the database
+exports.seedDatabase = (req, res, next) => {
+  Admin.seed().catch((err) => {
+    res.status(500).send({
+      message: err,
     });
+  });
+  Plant.seed().catch((err) => {
+    res.status(500).send({
+      message: err,
+    });
+  });
+  User.seed().catch((err) => {
+    res.status(500).send({
+      message: err,
+    });
+  });
+  res.send({ success: true, message: "Database Seeded." });
 };
