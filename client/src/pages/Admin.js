@@ -5,17 +5,21 @@ import { useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
 const Admin = () => {
+  const REACT_APP_SERVER_URL =
+    process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
+
   const history = useHistory();
 
   const token =
     localStorage.getItem("plantme_token") ??
     sessionStorage.getItem("plantme_token");
 
-  const [stats, setStats] = useState({});
+  const [stats, setStats] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/auth/stats",
+        `${REACT_APP_SERVER_URL}/api/v1/admin/endpointStats`,
         {
           headers: {
             plantme_token: token,
@@ -25,24 +29,39 @@ const Admin = () => {
       setStats(data);
     };
     fetchData();
-  }, [token]);
+  }, [token, REACT_APP_SERVER_URL]);
+
+  const toMainPage = (e) => {
+    e.preventDefault();
+    history.push("/");
+  };
 
   return (
     <>
-      <table style={{ border: "1px solid black" }}>
+      <table style={{ border: "1px solid black", padding: "5px" }}>
         <thead>
           <tr>
             <th style={{ border: "1px solid black", padding: "5px" }}>Route</th>
+            <th style={{ border: "1px solid black", padding: "5px" }}>
+              Endpoint
+            </th>
             <th style={{ border: "1px solid black", padding: "5px" }}>
               Requests
             </th>
           </tr>
         </thead>
         <tbody>
-          {Object.keys(stats).map((key) => (
-            <tr key={key}>
-              <td style={{ border: "1px solid black" }}>{key}</td>
-              <td style={{ border: "1px solid black" }}>{stats[key]}</td>
+          {stats.map((stat, idx) => (
+            <tr key={idx}>
+              <td style={{ border: "1px solid black", padding: "5px" }}>
+                {stat.method}
+              </td>
+              <td style={{ border: "1px solid black", padding: "5px" }}>
+                {stat.endpoint}
+              </td>
+              <td style={{ border: "1px solid black", padding: "5px" }}>
+                {stat.requests}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -50,10 +69,7 @@ const Admin = () => {
       <Button
         variant="secondary"
         style={{ margin: "10px" }}
-        onClick={() => {
-          history.push("/");
-        }}
-      >
+        onClick={(e) => toMainPage(e)}>
         Back
       </Button>{" "}
     </>

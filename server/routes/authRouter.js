@@ -1,13 +1,15 @@
 const express = require("express");
 const authRouter = express.Router();
 const jwt = require("jsonwebtoken");
-const StatReport = require("../StatReport");
+require("dotenv").config();
 const auth = require("../middleware/auth");
 
+// TEMP USERS
 const users = [
   { email: "jieun@gmail.com", password: "123123" },
   { email: "jay@gmail.com", password: "123123" },
   { email: "jagi@gmail.com", password: "123123" },
+  { email: "test@gmail.com", password: "123123" },
   { email: "admin@gmail.com", password: "1234abcd" },
 ];
 
@@ -24,7 +26,6 @@ authRouter.post("/register", (req, res) => {
 
     const newUser = { email, password };
     users.push(newUser);
-    StatReport.statsObj["POST:/api/v1/auth/register"]++;
     return res.status(200).send("Register success");
   } catch (error) {
     return res.status(500).send("Internal server error");
@@ -46,13 +47,11 @@ authRouter.post("/login", (req, res) => {
 
   // Fetch a user from DB
   try {
-    targetUser = users.filter((user) => user.email === email);
+    targetUser = users.find((user) => user.email === email);
 
-    if (targetUser.length === 0) {
-      return res.status(400).send("User not exist");
+    if (!targetUser) {
+      return res.status(400).send("User does not exist");
     }
-
-    targetUser = targetUser[0];
 
     if (targetUser.password !== password) {
       return res.status(400).send("Invalid credential");
@@ -60,19 +59,15 @@ authRouter.post("/login", (req, res) => {
 
     const token = jwt.sign(
       {
-        email,
+        exp: 60 * 60,
+        data: { email },
       },
-      process.env.JSONWEBTOKEN_SECRET,
-      {
-        expiresIn: "1h",
-      }
+      process.env.JSONWEBTOKEN_SECRET
     );
 
     if (!token) {
-      return res.status(500).send("Internal server error");
+      return res.status(500).send("Internal server error - token");
     }
-
-    StatReport.statsObj["POST:/api/v1/auth/login"]++;
 
     return res.status(200).json({ token });
   } catch (e) {

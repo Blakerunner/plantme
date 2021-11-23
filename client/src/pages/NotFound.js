@@ -17,8 +17,7 @@ const NotFound = () => {
       <Button
         variant="secondary"
         // style={{ marginLeft: "10px" }}
-        onClick={(e) => toMainPage(e)}
-      >
+        onClick={(e) => toMainPage(e)}>
         Back to Landing Page
       </Button>
     </div>

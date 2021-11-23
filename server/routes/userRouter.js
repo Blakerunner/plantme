@@ -1,16 +1,15 @@
 const express = require("express");
 const userRouter = express.Router();
 const userController = require("../controllers/userController");
-const adminController = require("../controllers/adminController");
 
-// Get all plants
-userRouter.get("/", adminController.update, userController.getAll);
+// Get user's plant list
+userRouter.get("/", userController.me);
 
-// Seed plants table
-userRouter.get("/seed", userController.seed);
+// Add plant to the user's favorites
+userRouter.post("/", userController.addPlant);
 
-// Create new plant
-userRouter.post("/create", userController.addPlant);
+// Delete plant from user's favorites
+userRouter.delete("/", userController.deletePlant);
 
 module.exports = {
   userRouter,

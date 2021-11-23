@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import "./auth.css";
 import Alert from "react-bootstrap/Alert";
 
 const Login = ({ loginHandler }) => {
   const history = useHistory();
-
+  const REACT_APP_SERVER_URL =
+    process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [staySignedIn, setStaySignedIn] = useState(false);
@@ -20,8 +21,7 @@ const Login = ({ loginHandler }) => {
     ) {
       history.push("/");
     }
-    // eslint-disable-next-line
-  }, []);
+  });
 
   const checkValidity = () => {
     const re =
@@ -62,7 +62,7 @@ const Login = ({ loginHandler }) => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/login`,
+        `${REACT_APP_SERVER_URL}/api/v1/auth/login`,
         data
       );
       const token = response.data.token;
@@ -120,7 +120,7 @@ const Login = ({ loginHandler }) => {
         Stay signed in
       </div>
       <div style={{ textAlign: "center" }}>
-        <a href="/register">Create new account</a>
+        <Link to="/register">Create new account</Link>
       </div>
     </div>
   );
