@@ -12,7 +12,7 @@ const About = () => {
 
   return (
     <div>
-      <h3 style={{ padding: "10px" }}>Author: Blake, Jooney, Takashi, Jieun</h3>
+      <h3 style={{ padding: "10px" }}>Author: Blake, Jooney, Tommy, Jieun</h3>
       <Button
         variant="secondary"
         style={{ marginLeft: "10px" }}
