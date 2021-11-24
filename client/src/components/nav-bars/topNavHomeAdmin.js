@@ -1,16 +1,17 @@
 import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button';
 import './navStyle.css';
 
-const TopNavHome = () => {
-  const history = useHistory();
-
-  const goToLogin = () => {
-    history.push('/login');
+const TopNavHomeAdmin = () => {
+  const logout = () => {
+    localStorage.removeItem('plantme_token');
+    sessionStorage.removeItem('plantme_token');
+    window.location.reload();
   };
+
   return (
     <Navbar className='color-nav' collapseOnSelect expand='lg'>
       <Container>
@@ -23,12 +24,18 @@ const TopNavHome = () => {
             <Nav.Link as={Link} to='/plants' className='plants'>
               Plants
             </Nav.Link>
+            <Nav.Link as={Link} to='/admin' className='admin'>
+              Admin
+            </Nav.Link>
             <Nav.Link as={Link} to='/about' className='aboutUs'>
               About Us
             </Nav.Link>
+            <Nav.Link as={Link} to='/documentation' className='documentation'>
+              API Documentation
+            </Nav.Link>
           </Nav>
-          <Button variant='outline-secondary' onClick={goToLogin}>
-            Login
+          <Button variant='outline-secondary' onClick={logout}>
+            Logout
           </Button>
         </Navbar.Collapse>
       </Container>
@@ -36,4 +43,4 @@ const TopNavHome = () => {
   );
 };
 
-export default TopNavHome;
+export default TopNavHomeAdmin;
