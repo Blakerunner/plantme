@@ -10,6 +10,7 @@ import Plants from './pages/Plants';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import Documentation from './pages/Documentation';
+import UserPage from './pages/UserPage';
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -44,6 +45,7 @@ const App = () => {
           render={(props) => <Login {...props} loginHandler={setLogin} />}
           exact
         />
+        <Route path='/register' component={Register} exact />
         <Route path='/about' component={About} exact />
         <PrivateRoute
           path='/documentation'
@@ -51,9 +53,9 @@ const App = () => {
           auth={auth}
           exact
         />
-        <PrivateRoute path='/plants' component={Plants} auth={auth} />
+        <Route path='/plants' component={Plants} auth={auth} />
         <PrivateRoute path='/admin' component={Admin} auth={auth} />
-        <Route path='/register' component={Register} exact />
+        <PrivateRoute path='/mypage/:userId' component={UserPage} auth={auth} />
         <Route component={NotFound} />
       </Switch>
     </main>
