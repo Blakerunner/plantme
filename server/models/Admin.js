@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Admin = sequelize.define("Admin", {
+  const Admin = sequelize.define('Admin', {
     method: {
       type: Sequelize.STRING,
     },
@@ -14,4 +14,3 @@ module.exports = (sequelize, Sequelize) => {
 
   return Admin;
 };
-
