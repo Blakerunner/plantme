@@ -1,14 +1,14 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const cors = require("cors");
-const adminController = require("./controllers/adminController");
-const { userRouter } = require("./routes/userRouter");
-const { plantRouter } = require("./routes/plantRouter");
-const { adminRouter } = require("./routes/adminRouter");
-const { authRouter } = require("./routes/authRouter");
+const cors = require('cors');
+const adminController = require('./controllers/adminController');
+const { userRouter } = require('./routes/userRouter');
+const { plantRouter } = require('./routes/plantRouter');
+const { adminRouter } = require('./routes/adminRouter');
+const { authRouter } = require('./routes/authRouter');
 
 // ****** DOTENV ******
-require("dotenv").config();
+require('dotenv').config();
 
 // ****** DATABASE INIT ******
 require("./models/db");
@@ -39,10 +39,10 @@ app.use(cors(corsOptions));
 app.use(adminController.updateEndpoint);
 
 // ****** ROUTES ******
-app.use("/api/v1/user", userRouter);
-app.use("/api/v1/plant", plantRouter);
-app.use("/api/v1/admin", adminRouter);
-app.use("/api/v1/auth", authRouter);
+app.use('/api/v1/user', userRouter);
+app.use('/api/v1/plant', plantRouter);
+app.use('/api/v1/admin', adminRouter);
+app.use('/api/v1/auth', authRouter);
 
 // ****** SERVER LAUNCH ******
 const PORT = process.env.PORT || 8080;

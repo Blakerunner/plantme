@@ -51,8 +51,8 @@ input:not(:placeholder-shown) {
   outline: none;
 }
 
-input[type="submit"] {
-  background-color: #9bc0ae;
+input[type='submit'] {
+  background-color: #6c757d;
   border: none;
   color: white;
   border-radius: 5px;
@@ -62,12 +62,12 @@ input[type="submit"] {
   margin-top: 50px;
 }
 
-input[type="submit"]:hover {
-  background-color: rgb(144, 179, 162);
+input[type='submit']:hover {
+  background-color: rgb(87, 94, 100);
 }
 
-input[type="submit"]:focus {
-  background-color: rgb(144, 179, 162);
+input[type='submit']:focus {
+  background-color: rgb(87, 94, 100);
 }
 
 .modal {
