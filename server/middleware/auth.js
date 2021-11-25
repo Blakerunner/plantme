@@ -1,23 +1,35 @@
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
 
-dotenv.config();
-
-const auth = (req, res, next) => {
-  const token = req.headers.plantme_token;
-
-  if (!token) {
-    return res.status(401).send("No token, authorization denied");
-  }
-
+const authUser = (req, res, next) => {
   try {
+    const token = req.headers.plantme_token;
+    if (!token) {
+      return res.status(401).send("No token, Authorization denied");
+    }
     const decoded = jwt.verify(token, process.env.JSONWEBTOKEN_SECRET);
-    console.log("🚀 ~ file: auth.js ~ line 16 ~ auth ~ decoded", decoded);
     req.email = decoded.email;
     next();
   } catch (err) {
-    res.status(401).send("Token is not valid");
+    res.status(401).send({ success: false, message: "Not Authorized" });
   }
 };
 
-module.exports = auth;
+const authAdmin = (req, res, next) => {
+  try {
+    const token = req.headers.plantme_token;
+    if (!token) {
+      return res.status(401).send("No token, Authorization denied");
+    }
+    const decoded = jwt.verify(token, process.env.JSONWEBTOKEN_SECRET);
+    req.email = decoded.email;
+    decoded.isAdmin == true;
+    next();
+  } catch (err) {
+    res.status(401).send({ success: false, message: "Not Authorized" });
+  }
+};
+
+module.exports = {
+  authUser,
+  authAdmin
+};
