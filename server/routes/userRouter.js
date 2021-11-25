@@ -6,10 +6,10 @@ const userController = require("../controllers/userController");
 userRouter.get("/", userController.me);
 
 // Add plant to the user's favorites
-userRouter.post("/", userController.addPlant);
+userRouter.put("/", userController.addMyPlant);
 
 // Delete plant from user's favorites
-userRouter.delete("/", userController.deletePlant);
+userRouter.delete("/", userController.deleteMyPlant);
 
 module.exports = {
   userRouter,

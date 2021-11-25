@@ -1,58 +1,84 @@
-const { User } = require('../models/User');
-const userData = require('../data/userData');
+const db = require("../models/db");
+const User = db.user;
 
-// me
-exports.me = (req, res) => {
-  const id = req.query.id;
-  try {
-    const filteredUser = userData.userData.filter((user) => user.id === id);
-    if (filteredUser.length == 0 || filteredUser.length > 1) {
-      return res.status(500).send('Internal server error');
-    }
-    const data = { plants: filteredUser[0].plants };
-    console.log(data);
-    return res.status(200).json(data);
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).send('Internal server error');
-  }
+// me user profile
+exports.me = (req, res, next) => {
+  req.
+  User.scope('withoutPassword').findOne({ where: {id: token.id} })
+    .then((user) => {
+      res.send({ success: true, user });
+    })
+    .catch((err) => {
+      res.send({ success: false, message: err });
+    });
 };
 
-// create
-exports.addPlant = (req, res) => {
+// add plant to user profile
+exports.addMyPlant = (req, res, next) => {
+  let user = req.body.user;
   let plant = req.body.plant;
   if (!plant) {
     res.status(500).send({
-      message: 'plant required to create new Plant',
+      success: false,
+      message: "Plant required to create new Plant",
     });
   } else {
-    Plant.addPlant(plant)
-      .then((data) => {
-        res.send(data);
+    User.findOne({ where: { email: user.email } })
+      .then((user) => {
+        let plantId = parseInt(plant.id);
+        let ids = JSON.parse(user.plantList).ids;
+        if (ids.includes(plantId)) {
+          res.send({
+            success: true,
+            message: `You already have plant id ${plant.id}`,
+          });
+        } else {
+          ids.push(plantId);
+          user.plantList = { ids: ids };
+          user.save();
+          res.send({ success: true, message: `Added plant id ${plant.id}` });
+        }
       })
       .catch((err) => {
         res.status(500).send({
+          success: false,
           message: err,
         });
       });
   }
 };
 
-// Delete plant
-exports.deletePlant = (req, res) => {
-  res.send({ success: true, msg: req.baseUrl });
-};
-
-// seed
-exports.seed = (req, res, next) => {
-  User.seed()
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err,
-      });
+// Delete plant from user profile
+exports.deleteMyPlant = (req, res, next) => {
+  let user = req.body.user;
+  let plant = req.body.plant;
+  if (!plant) {
+    res.status(500).send({
+      success: false,
+      message: "Plant required to create new Plant",
     });
-  next();
+  } else {
+    User.findOne({ where: { email: user.email } })
+      .then((user) => {
+        let plantId = parseInt(plant.id);
+        let ids = JSON.parse(user.plantList).ids;
+        if (ids.includes(plantId)) {
+          ids = ids.filter((item) => item !== plantId);
+          user.plantList = { ids: ids };
+          user.save();
+          res.send({ success: true, message: `Removed plant id ${plant.id}` });
+        } else {
+          res.send({
+            success: true,
+            message: `You dont have that plant id ${plant.id}`,
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({
+          success: false,
+          message: err,
+        });
+      });
+  }
 };
