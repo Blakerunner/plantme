@@ -8,7 +8,7 @@ const adminData = [
   { method: "GET", endpoint: "/api/v1/user", requests: randomInt() },
   { method: "PUT", endpoint: "/api/v1/user", requests: randomInt() },
   { method: "DELETE", endpoint: "/api/v1/user", requests: randomInt() },
-  { method: "POST", endpoint: "api/v1/auth/register", requests: randomInt() },
+  { method: "POST", endpoint: "/api/v1/auth/register", requests: randomInt() },
   { method: "POST", endpoint: "/api/v1/auth/login", requests: randomInt() },
   { method: "POST", endpoint: "/api/v1/auth/logout", requests: randomInt() },
   {
