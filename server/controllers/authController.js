@@ -88,8 +88,8 @@ exports.login = (req, res, next) => {
               message: 'Server Failed to create token',
             });
           }
-          res.cookie('jwt', token, { secure: true, httpOnly: true });
-          res.send({ success: true, message: 'Login Success', user });
+          res.cookie('jwt', token, { secure: false, httpOnly: true, expires: 60 * 60 * 24 });
+          res.send({ success: true, message: 'Login Success', user, token }); // need to remove token from send as it is unsecure.
         } else {
           return res
             .status(403)
