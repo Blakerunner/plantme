@@ -2,7 +2,12 @@ const db = require('../models/db');
 const Admin = db.admin;
 const Plant = db.plant;
 const User = db.user;
-const { adminData, plantData, userData } = require('../data/seedData');
+const {
+  adminData,
+  plantData,
+  userData,
+  usersplantsData,
+} = require('../data/seedData');
 
 // getAll endpoint stats
 exports.getEndpoint = (req, res, next) => {
@@ -22,51 +27,59 @@ exports.getEndpoint = (req, res, next) => {
 exports.updateEndpoint = (req, res, next) => {
   const method = req.method;
   const endpoint = req.url;
-  console.log('Updating admin stats:', method, endpoint);
-  Admin.findOne({
-    where: {
-      method: method,
-      endpoint: endpoint,
-    },
-  })
-    .then((result) => {
-      if (result) {
-        result.increment('requests');
-      } else {
-        Admin.create({ method, endpoint, requests: 1 }).catch((err) => {
-          console.log(
-            '🚀 ~ file: adminController.js ~ line 32 ~ updateEndpoint err',
-            err
-          );
-        });
-      }
+  if (!endpoint == '/api/v1/admin/seedDatabase') {
+    Admin.findOne({
+      where: {
+        method: method,
+        endpoint: endpoint,
+      },
     })
-    .catch((err) => {
-      console.log(
-        '🚀 ~ file: adminController.js ~ line 32 ~ updateEndpoint err',
-        err
-      );
-    });
-  next();
+      .then((result) => {
+        if (result) {
+          result.increment('requests');
+        } else {
+          Admin.create({ method, endpoint, requests: 1 }).catch((err) => {
+            console.log(
+              '🚀 ~ file: adminController.js ~ line 32 ~ updateEndpoint err',
+              err
+            );
+          });
+        }
+        console.log('Updating admin stats:', method, endpoint);
+        next();
+      })
+      .catch((err) => {
+        console.log(
+          '🚀 ~ file: adminController.js ~ line 32 ~ updateEndpoint err',
+          err
+        );
+        next();
+      });
+  } else {
+    next();
+  }
 };
 
 // seed the database
 exports.seedDatabase = async (req, res, next) => {
   try {
-    await Admin.sync({ alter: true, force: true });
     await Admin.bulkCreate(adminData);
-    console.log('The table for the Admin model was just (re)created!');
-
-    await User.sync({ alter: true, force: true });
     await User.bulkCreate(userData);
-    console.log('The table for the User model was just (re)created!');
-
-    await Plant.sync({ alter: true, force: true });
     await Plant.bulkCreate(plantData);
-    console.log('The table for the Plant model was just (re)created!');
+
+    await usersplantsData.forEach((association) => {
+      User.findByPk(association.userId).then((user) => {
+        Plant.findByPk(association.plantId).then((plant) => {
+          user.addPlant(plant);
+        });
+      });
+    });
 
     res.send({ success: true, message: 'Database Seeded.' });
   } catch (err) {
-    return `err: ${err}`;
+    console.log(
+      '🚀 ~ file: adminController.js ~ line 88 ~ exports.seedDatabase= ~ err',
+      err
+    );
   }
 };

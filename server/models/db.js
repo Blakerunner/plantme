@@ -21,8 +21,19 @@ db.sequelize = sequelize;
 
 // connect our models for reference
 db.admin = require('./Admin')(sequelize, Sequelize);
-db.plant = require('./Plant')(sequelize, Sequelize);
 db.user = require('./User')(sequelize, Sequelize);
+db.plant = require('./Plant')(sequelize, Sequelize);
+db.usersplants = require('./UsersPlants')(sequelize);
+
+// link users -> plants
+db.user.belongsToMany(db.plant, {
+  through: db.usersplants,
+  constraints: false,
+});
+db.plant.belongsToMany(db.user, {
+  through: db.usersplants,
+  constraints: false,
+});
 
 // Confirm connection to database.
 db.sequelize
