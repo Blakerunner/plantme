@@ -88,7 +88,11 @@ exports.login = (req, res, next) => {
               message: 'Server Failed to create token',
             });
           }
-          res.cookie('jwt', token, { secure: false, httpOnly: true, expires: 60 * 60 * 24 });
+          res.cookie('plantmejwt', token, {
+            secure: false,
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24,
+          });
           res.send({ success: true, message: 'Login Success', user, token }); // need to remove token from send as it is unsecure.
         } else {
           return res
@@ -105,19 +109,7 @@ exports.login = (req, res, next) => {
 
 // Silently logged in a user
 exports.silentLogin = (req, res, next) => {
-  const bearer = req.headers.authorization;
-  const token = bearer.split(' ')[1];
-  if (!token) {
-    return res.status(403).send('Token is required for authentication');
-  }
-  const decoded = jwt.verify(token, process.env.JSONWEBTOKEN_SECRET);
-  console.log('🚀 ~ file: authController.js ~ line 114 ~ decoded', decoded);
-  User.findOne({
-    where: {
-      id: decoded.user.id,
-      email: decoded.user.email,
-    },
-  })
+  User.findByPk(req.user.id)
     .then((user) => {
       if (!user) {
         return res
@@ -127,7 +119,7 @@ exports.silentLogin = (req, res, next) => {
       user.password = null;
       return res
         .status(200)
-        .send({ success: true, message: 'Silent Login Success', token, user });
+        .send({ success: true, message: 'Silent Login Success', user });
     })
     .catch((err) => {
       return res.status(500).send({ success: false, message: err });

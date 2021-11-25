@@ -4,25 +4,20 @@ const User = db.user;
 
 const authUser = (req, res, next) => {
   try {
-    const bearer = req.headers.authorization;
-    const token = bearer.split(' ')[1];
+    const token = req.cookies.plantmejwt;
     if (!token) {
       return res.status(403).send('Token is required for authentication');
     }
     const decoded = jwt.verify(token, process.env.JSONWEBTOKEN_SECRET);
-    User.findOne({
-      where: {
-        id: decoded.user.id,
-        email: decoded.user.email,
-      },
-    }).then((user) => {
+    User.findByPk(decoded.user.id).then((user) => {
       if (!user) {
         return res
           .status(401)
           .send({ success: false, message: 'User Does Not Exists.' });
       }
+      req.user = user;
+      next();
     });
-    next();
   } catch (err) {
     res.status(401).send({ success: false, message: 'Not Authorized' });
   }
@@ -30,18 +25,12 @@ const authUser = (req, res, next) => {
 
 const authAdmin = (req, res, next) => {
   try {
-    const bearer = req.headers.authorization;
-    const token = bearer.split(' ')[1];
+    const token = req.cookies.plantmejwt;
     if (!token) {
       return res.status(403).send('Token is required for authentication');
     }
     const decoded = jwt.verify(token, process.env.JSONWEBTOKEN_SECRET);
-    User.findOne({
-      where: {
-        id: decoded.user.id,
-        email: decoded.user.email,
-      },
-    }).then((user) => {
+    User.findByPk(decoded.user.id).then((user) => {
       if (!user) {
         return res
           .status(401)
@@ -50,8 +39,9 @@ const authAdmin = (req, res, next) => {
       if (!user.isAdmin) {
         res.status(401).send({ success: false, message: 'Not Authorized' });
       }
+      req.user = user.dataValues;
+      next();
     });
-    next();
   } catch (err) {
     res.status(401).send({ success: false, message: 'Not Authorized' });
   }

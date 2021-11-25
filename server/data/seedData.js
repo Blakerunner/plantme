@@ -25,7 +25,6 @@ const userData = [
   {
     email: 'user@gmail.com',
     password: '$2b$08$L3IqZnNuDZNifDrjlRmX.up7/RETM3382uM1EqyoAWWsS.lm84z4G',
-    plantList: { ids: [1, 4] },
   }, //123123
   {
     email: 'admin@gmail.com',
@@ -34,8 +33,14 @@ const userData = [
   }, //1234abcd
 ];
 
+const usersplantsData = [
+  { userId: 1, plantId: 2 },
+  { userId: 1, plantId: 3 },
+];
+
 module.exports = {
   adminData,
   plantData,
   userData,
+  usersplantsData,
 };

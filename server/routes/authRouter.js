@@ -1,6 +1,7 @@
 const express = require('express');
 const authRouter = express.Router();
 const authController = require('../controllers/authController');
+const { authUser } = require('../middleware/auth');
 
 // Register a new user
 authRouter.post('/register', authController.register);
@@ -9,7 +10,7 @@ authRouter.post('/register', authController.register);
 authRouter.post('/login', authController.login);
 
 // Silent login with a token
-authRouter.post('/silentLogin', authController.silentLogin);
+authRouter.post('/silentLogin', authUser, authController.silentLogin);
 
 module.exports = {
   authRouter,

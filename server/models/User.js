@@ -17,10 +17,6 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
-      plantList: {
-        type: Sequelize.JSON,
-        defaultValue: { ids: [] },
-      },
     },
     {
       scopes: {
