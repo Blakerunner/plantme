@@ -1,4 +1,4 @@
-const db = require("../models/db");
+const db = require('../models/db');
 const Plant = db.plant;
 
 // get all plants
@@ -37,7 +37,7 @@ exports.addPlant = (req, res, next) => {
   if (!newPlant) {
     res.status(500).send({
       success: false,
-      message: "Plant required to create new Plant",
+      message: 'Plant required to create new Plant',
     });
   }
   Plant.findOne({
@@ -48,7 +48,7 @@ exports.addPlant = (req, res, next) => {
     if (plant) {
       return res
         .status(401)
-        .send({ success: false, message: "Plant already exists" });
+        .send({ success: false, message: 'Plant already exists' });
     } else {
       Plant.create(newPlant)
         .then((plant) => {
@@ -65,15 +65,18 @@ exports.addPlant = (req, res, next) => {
 exports.editPlant = (req, res, next) => {
   const plant = req.body.plant;
   Plant.update(
-    { plant },
+    { name: plant.name },
     {
       where: {
-        name: plant.name,
+        id: plant.id,
       },
     }
   )
-    .then((plant) => {
-      res.send({ success: true, plant });
+    .then(() => {
+      res.send({
+        success: true,
+        message: `Plant Id ${plant.id} updated to ${JSON.stringify(plant)}`,
+      });
     })
     .catch((err) => {
       return res.status(500).send({ success: false, message: err });
@@ -88,8 +91,15 @@ exports.deletePlant = (req, res, next) => {
       id: plant.id,
     },
   })
-    .then((deadplant) => {
-      res.send({ success: true, deadplant });
+    .then((response) => {
+      if (response) {
+        res.send({ success: true, message: `Plant Id ${plant.id} deleted.` });
+      } else {
+        res.send({
+          success: false,
+          message: `Plant Id ${plant.id} not found.`,
+        });
+      }
     })
     .catch((err) => {
       return res.status(500).send({ success: false, message: err });
