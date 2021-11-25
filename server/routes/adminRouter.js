@@ -1,13 +1,13 @@
-const express = require("express");
+const express = require('express');
 const adminRouter = express.Router();
-const adminController = require("../controllers/adminController");
-const auth = require("../middleware/auth");
+const adminController = require('../controllers/adminController');
+const {authAdmin} = require('../middleware/auth');
 
 // Get all plants
-adminRouter.get("/endpointStats", adminController.getEndpoint);
+adminRouter.get('/endpointStats', authAdmin, adminController.getEndpoint);
 
 // Seed plants table
-adminRouter.get("/seedDatabase", adminController.seedDatabase);
+adminRouter.get('/seedDatabase', adminController.seedDatabase);
 
 module.exports = {
   adminRouter,

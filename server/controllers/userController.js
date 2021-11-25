@@ -1,9 +1,18 @@
-const db = require("../models/db");
+const db = require('../models/db');
+const Plant = db.plant;
 const User = db.user;
+const UsersPlants = db.usersplants;
 
 // me user profile
 exports.me = (req, res, next) => {
-  User.scope('withoutPassword').findOne({ where: {email: req.body.user.email} })
+  User.scope('withoutPassword')
+    .findOne({
+      where: { id: req.user.id },
+      include: {
+        model: Plant,
+        through: { attributes: [] }, // will create a right join
+      },
+    })
     .then((user) => {
       res.send({ success: true, user });
     })
@@ -13,71 +22,68 @@ exports.me = (req, res, next) => {
 };
 
 // add plant to user profile
-exports.addMyPlant = (req, res, next) => {
-  let user = req.body.user;
-  let plant = req.body.plant;
+exports.addMyPlant = async (req, res, next) => {
+  const user = req.user;
+  const { plant } = req.body;
   if (!plant) {
     res.status(500).send({
       success: false,
-      message: "Plant required to create new Plant",
+      message: 'Plant required to create new Plant',
     });
   } else {
-    User.findOne({ where: { email: user.email } })
-      .then((user) => {
-        let plantId = parseInt(plant.id);
-        let ids = JSON.parse(user.plantList).ids;
-        if (ids.includes(plantId)) {
-          res.send({
-            success: true,
-            message: `You already have plant id ${plant.id}`,
-          });
-        } else {
-          ids.push(plantId);
-          user.plantList = { ids: ids };
-          user.save();
-          res.send({ success: true, message: `Added plant id ${plant.id}` });
-        }
-      })
-      .catch((err) => {
-        res.status(500).send({
-          success: false,
-          message: err,
-        });
+    const alreadyHasPlant = await UsersPlants.findOne({
+      where: { PlantId: plant.id, UserId: user.id },
+    });
+    console.log(
+      '🚀 ~ file: userController.js ~ line 37 ~ alreadyHasPlant',
+      alreadyHasPlant
+    );
+    if (!alreadyHasPlant) {
+      User.findByPk(user.id)
+        .then((userLocal) => {
+          Plant.findByPk(plant.id)
+            .then((plantLocal) => {
+              if (!plantLocal) {
+                res.status(400).send({
+                  success: false,
+                  message: `Plant Id ${plant.id} does not exist.`,
+                });
+              }
+              userLocal.addPlant(plantLocal);
+              res.send({
+                success: true,
+                message: `User ${user.email} added Plant Id ${plant.id}`,
+              });
+            })
+            .catch((err) => res.status(500).send(err));
+        })
+        .catch((err) => res.status(500).send(err));
+    } else {
+      res.send({
+        success: false,
+        message: `User ${user.email} already has Plant Id ${plant.id}`,
       });
+    }
   }
 };
 
 // Delete plant from user profile
 exports.deleteMyPlant = (req, res, next) => {
-  let user = req.body.user;
-  let plant = req.body.plant;
+  const user = req.user;
+  const { plant } = req.body;
   if (!plant) {
     res.status(500).send({
       success: false,
-      message: "Plant required to create new Plant",
+      message: 'No plant reference to delete',
     });
   } else {
-    User.findOne({ where: { email: user.email } })
-      .then((user) => {
-        let plantId = parseInt(plant.id);
-        let ids = JSON.parse(user.plantList).ids;
-        if (ids.includes(plantId)) {
-          ids = ids.filter((item) => item !== plantId);
-          user.plantList = { ids: ids };
-          user.save();
-          res.send({ success: true, message: `Removed plant id ${plant.id}` });
-        } else {
-          res.send({
-            success: true,
-            message: `You dont have that plant id ${plant.id}`,
-          });
-        }
-      })
-      .catch((err) => {
-        res.status(500).send({
-          success: false,
-          message: err,
+    UsersPlants.destroy({ where: { UserId: user.id, PlantId: plant.id } })
+      .then(() => {
+        res.send({
+          success: true,
+          message: `User ${user.email} no longer associated with Plant Id ${plant.id}`,
         });
-      });
+      })
+      .catch((err) => res.status(500).send(err));
   }
 };
