@@ -10,12 +10,18 @@ const { authRouter } = require("./routes/authRouter");
 // ****** DOTENV ******
 require("dotenv").config();
 
+// ****** DATABASE INIT ******
+require("./models/db");
+
 // ****** MIDDLEWEAR ******
-app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }));
 
-// ****** TRACK AND UPDATE REQUESTS ******
+// CORS
+const options = {}
+app.use(cors());
+
+// Track and update endpoint admin stats
 app.use(adminController.updateEndpoint);
 
 // ****** ROUTES ******
