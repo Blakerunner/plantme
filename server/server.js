@@ -18,8 +18,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }));
 
 // CORS
-const options = {}
-app.use(cors());
+let whitelist = process.env.WHITELIST.split(",");
+console.log("🚀 ~ file: server.js ~ line 22 ~ whitelist", whitelist);
+
+let corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+  methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Track and update endpoint admin stats
 app.use(adminController.updateEndpoint);
