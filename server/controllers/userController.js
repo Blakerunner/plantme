@@ -1,9 +1,10 @@
-const db = require("../models/db");
+const db = require('../models/db');
 const User = db.user;
 
 // me user profile
 exports.me = (req, res, next) => {
-  User.scope('withoutPassword').findOne({ where: {email: req.body.user.email} })
+  User.scope('withoutPassword')
+    .findOne({ where: { email: req.body.user.email } })
     .then((user) => {
       res.send({ success: true, user });
     })
@@ -19,7 +20,7 @@ exports.addMyPlant = (req, res, next) => {
   if (!plant) {
     res.status(500).send({
       success: false,
-      message: "Plant required to create new Plant",
+      message: 'Plant required to create new Plant',
     });
   } else {
     User.findOne({ where: { email: user.email } })
@@ -54,7 +55,7 @@ exports.deleteMyPlant = (req, res, next) => {
   if (!plant) {
     res.status(500).send({
       success: false,
-      message: "Plant required to create new Plant",
+      message: 'Plant required to create new Plant',
     });
   } else {
     User.findOne({ where: { email: user.email } })

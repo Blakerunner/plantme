@@ -1,14 +1,14 @@
-const db = require("../models/db");
+const db = require('../models/db');
 const Admin = db.admin;
 const Plant = db.plant;
 const User = db.user;
-const { adminData, plantData, userData } = require("../data/seedData");
+const { adminData, plantData, userData } = require('../data/seedData');
 
 // getAll endpoint stats
 exports.getEndpoint = (req, res, next) => {
   Admin.findAll()
     .then((data) => {
-      res.send(data);
+      res.send({ success: true, data });
     })
     .catch((err) => {
       res.status(500).send({
@@ -22,7 +22,7 @@ exports.getEndpoint = (req, res, next) => {
 exports.updateEndpoint = (req, res, next) => {
   const method = req.method;
   const endpoint = req.url;
-  console.log("Updating admin stats:", method, endpoint);
+  console.log('Updating admin stats:', method, endpoint);
   Admin.findOne({
     where: {
       method: method,
@@ -30,11 +30,20 @@ exports.updateEndpoint = (req, res, next) => {
     },
   })
     .then((result) => {
-      result.increment("requests");
+      if (result) {
+        result.increment('requests');
+      } else {
+        Admin.create({ method, endpoint, requests: 1 }).catch((err) => {
+          console.log(
+            '🚀 ~ file: adminController.js ~ line 32 ~ updateEndpoint err',
+            err
+          );
+        });
+      }
     })
     .catch((err) => {
       console.log(
-        "🚀 ~ file: adminController.js ~ line 32 ~ updateEndpoint err",
+        '🚀 ~ file: adminController.js ~ line 32 ~ updateEndpoint err',
         err
       );
     });
@@ -46,17 +55,17 @@ exports.seedDatabase = async (req, res, next) => {
   try {
     await Admin.sync({ alter: true, force: true });
     await Admin.bulkCreate(adminData);
-    console.log("The table for the Admin model was just (re)created!");
+    console.log('The table for the Admin model was just (re)created!');
 
     await User.sync({ alter: true, force: true });
     await User.bulkCreate(userData);
-    console.log("The table for the User model was just (re)created!");
+    console.log('The table for the User model was just (re)created!');
 
     await Plant.sync({ alter: true, force: true });
     await Plant.bulkCreate(plantData);
-    console.log("The table for the Plant model was just (re)created!");
+    console.log('The table for the Plant model was just (re)created!');
 
-    res.send({ success: true, message: "Database Seeded." });
+    res.send({ success: true, message: 'Database Seeded.' });
   } catch (err) {
     return `err: ${err}`;
   }

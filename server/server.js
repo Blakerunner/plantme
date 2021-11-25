@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const cookieParser = require('cookie-parser')
 const adminController = require('./controllers/adminController');
 const { userRouter } = require('./routes/userRouter');
 const { plantRouter } = require('./routes/plantRouter');
@@ -11,15 +12,16 @@ const { authRouter } = require('./routes/authRouter');
 require('dotenv').config();
 
 // ****** DATABASE INIT ******
-require("./models/db");
+require('./models/db');
 
 // ****** MIDDLEWEAR ******
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }));
+app.use(cookieParser());
 
 // CORS
-let whitelist = process.env.WHITELIST.split(",");
-console.log("🚀 ~ file: server.js ~ line 22 ~ whitelist", whitelist);
+let whitelist = process.env.WHITELIST.split(',');
+console.log('🚀 ~ file: server.js ~ line 22 ~ whitelist', whitelist);
 
 let corsOptions = {
   origin: (origin, callback) => {
@@ -29,7 +31,10 @@ let corsOptions = {
       callback(null, false);
     }
   },
-  methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  ],
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
   credentials: true,
 };
 
