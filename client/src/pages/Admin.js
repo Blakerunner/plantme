@@ -26,7 +26,7 @@ const Admin = () => {
           },
         }
       );
-      setStats(data);
+      setStats(data.stats);
     };
     fetchData();
   }, [token, REACT_APP_SERVER_URL]);

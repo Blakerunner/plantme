@@ -12,7 +12,7 @@ const Plants = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(`${REACT_APP_SERVER_URL}/api/v1/plant`);
-      setPlants(data);
+      setPlants(data.data.plants);
     };
     fetchData();
   }, [REACT_APP_SERVER_URL]);
