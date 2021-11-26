@@ -13,12 +13,13 @@ const {
 exports.getEndpoint = (req, res, next) => {
   Admin.findAll()
     .then((data) => {
-      res.send({ success: true, data });
+      res.send({ success: true, message: 'successful operation', data: { stats: data } });
     })
     .catch((err) => {
       res.status(500).send({
         success: false,
         message: err,
+        data: {}
       });
     });
 };
@@ -75,7 +76,7 @@ exports.seedDatabase = async (req, res, next) => {
       });
     });
 
-    res.send({ success: true, message: 'Database Seeded.' });
+    res.send({ success: true, message: 'Database Seeded.', data: {} });
   } catch (err) {
     console.log(
       '🚀 ~ file: adminController.js ~ line 88 ~ exports.seedDatabase= ~ err',

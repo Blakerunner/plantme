@@ -14,10 +14,10 @@ exports.me = (req, res, next) => {
       },
     })
     .then((user) => {
-      res.send({ success: true, user });
+      res.send({ success: true, message: "Successful operation.", data: { user } });
     })
     .catch((err) => {
-      res.send({ success: false, message: err });
+      res.status(400).send({ success: false, message: err, data: {} });
     });
 };
 
@@ -29,6 +29,7 @@ exports.addMyPlant = async (req, res, next) => {
     res.status(500).send({
       success: false,
       message: 'Plant required to create new Plant',
+      data: {}
     });
   } else {
     const alreadyHasPlant = await UsersPlants.findOne({
@@ -47,12 +48,14 @@ exports.addMyPlant = async (req, res, next) => {
                 res.status(400).send({
                   success: false,
                   message: `Plant Id ${plant.id} does not exist.`,
+                  data: {}
                 });
               }
               userLocal.addPlant(plantLocal);
               res.send({
                 success: true,
                 message: `User ${user.email} added Plant Id ${plant.id}`,
+                data: {}
               });
             })
             .catch((err) => res.status(500).send(err));
@@ -62,6 +65,7 @@ exports.addMyPlant = async (req, res, next) => {
       res.send({
         success: false,
         message: `User ${user.email} already has Plant Id ${plant.id}`,
+        data: {}
       });
     }
   }
@@ -75,6 +79,7 @@ exports.deleteMyPlant = (req, res, next) => {
     res.status(500).send({
       success: false,
       message: 'No plant reference to delete',
+      data: {}
     });
   } else {
     UsersPlants.destroy({ where: { UserId: user.id, PlantId: plant.id } })
@@ -82,6 +87,7 @@ exports.deleteMyPlant = (req, res, next) => {
         res.send({
           success: true,
           message: `User ${user.email} no longer associated with Plant Id ${plant.id}`,
+          data: {}
         });
       })
       .catch((err) => res.status(500).send(err));
