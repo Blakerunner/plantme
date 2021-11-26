@@ -1,13 +1,13 @@
 const swaggerJSON = {
-  swagger: "2.0",
+  swagger: '2.0',
   info: {
     description:
-      "This is the API documentation for the Plantme, an API server dedicated to providing data about plants.",
-    version: "1.0.0",
-    title: "Plantme API",
+      'This is the API documentation for the Plantme, an API server dedicated to providing data about plants.',
+    version: '1.0.0',
+    title: 'Plantme API',
   },
-  host: "plantme.blakerunner.com",
-  basePath: "/api/v1",
+  host: 'plantme.blakerunner.com',
+  basePath: '/api/v1',
   tags: [
     {
       name: "plant",
@@ -26,7 +26,7 @@ const swaggerJSON = {
       description: "Operations related to admin data",
     }
   ],
-  schemes: ["https"],
+  schemes: ['https'],
   paths: {
     "/user/me": {
       get: {
@@ -37,13 +37,13 @@ const swaggerJSON = {
         produces: ["application/json"],
         responses: {
           200: {
-            description: "Successful operation",
+            description: 'Successful operation',
             schema: {
               $ref: "#/definitions/User"
             },
           },
           400: {
-            description: "Invalid status value",
+            description: 'Invalid status value',
           },
         },
         security: [
@@ -66,8 +66,8 @@ const swaggerJSON = {
             in: "path",
             description: "ID of plant that will be added to user's favourites",
             required: true,
-            type: "integer",
-            format: "int64",
+            type: 'integer',
+            format: 'int64',
           },
         ],
         responses: {
@@ -149,39 +149,39 @@ const swaggerJSON = {
         ],
       },
       post: {
-        tags: ["plant"],
-        summary: "Create a plant in the database with form data",
-        description: "Creates a plant.",
-        operationId: "updatePlantWithForm",
-        consumes: ["application/x-www-form-urlencoded"],
-        produces: ["application/json"],
+        tags: ['plant'],
+        summary: 'Create a plant in the database with form data',
+        description: 'Creates a plant.',
+        operationId: 'updatePlantWithForm',
+        consumes: ['application/x-www-form-urlencoded'],
+        produces: ['application/json'],
         parameters: [
           {
-            name: "plantId",
-            in: "path",
-            description: "ID of plant that needs to be created",
+            name: 'plantId',
+            in: 'path',
+            description: 'ID of plant that needs to be created',
             required: true,
-            type: "integer",
-            format: "int64",
+            type: 'integer',
+            format: 'int64',
           },
           {
-            name: "name",
-            in: "formData",
-            description: "Created name of the plant",
+            name: 'name',
+            in: 'formData',
+            description: 'Created name of the plant',
             required: false,
-            type: "string",
+            type: 'string',
           },
           {
-            name: "status",
-            in: "formData",
-            description: "Created status of the plant",
+            name: 'status',
+            in: 'formData',
+            description: 'Created status of the plant',
             required: false,
-            type: "string",
+            type: 'string',
           },
         ],
         responses: {
           405: {
-            description: "Invalid input",
+            description: 'Invalid input',
           },
         },
         security: [
@@ -198,26 +198,26 @@ const swaggerJSON = {
         produces: ["application/xml", "application/json"],
         parameters: [
           {
-            name: "api_key",
-            in: "header",
+            name: 'api_key',
+            in: 'header',
             required: false,
-            type: "string",
+            type: 'string',
           },
           {
-            name: "plantId",
-            in: "path",
-            description: "Plant ID to delete",
+            name: 'plantId',
+            in: 'path',
+            description: 'Plant ID to delete',
             required: true,
-            type: "integer",
-            format: "int64",
+            type: 'integer',
+            format: 'int64',
           },
         ],
         responses: {
           400: {
-            description: "Invalid ID supplied",
+            description: 'Invalid ID supplied',
           },
           404: {
-            description: "Plant not found",
+            description: 'Plant not found',
           },
         },
         security: [
@@ -234,26 +234,226 @@ const swaggerJSON = {
         produces: ["application/json"],
         parameters: [
           {
-            name: "api_key",
-            in: "header",
+            name: 'api_key',
+            in: 'header',
             required: false,
-            type: "string",
+            type: 'string',
           },
           {
-            name: "plantId",
-            in: "path",
-            description: "Plant ID to delete",
+            name: 'plantId',
+            in: 'path',
+            description: 'Plant ID to delete',
             required: true,
-            type: "integer",
-            format: "int64",
+            type: 'integer',
+            format: 'int64',
           },
         ],
         responses: {
           400: {
-            description: "Invalid ID supplied",
+            description: 'Invalid ID supplied',
           },
           404: {
-            description: "Plant not found",
+            description: 'Plant not found',
+          },
+        },
+        security: [
+          {
+            api_key: [],
+          },
+        ],
+      },
+    },
+    '/plant/{plantId}': {
+      get: {
+        tags: ['plant'],
+        summary: 'Find plant by ID',
+        description: 'Returns a single plant.',
+        operationId: 'getPlantById',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'plantId',
+            in: 'path',
+            description: 'ID of plant to return',
+            required: true,
+            type: 'integer',
+            format: 'int64',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#/definitions/Plant',
+            },
+          },
+          400: {
+            description: 'Invalid ID supplied',
+          },
+          404: {
+            description: 'Plant not found',
+          },
+        },
+        security: [
+          {
+            api_key: [],
+          },
+        ],
+      },
+    },
+    '/auth/register': {
+      post: {
+        tags: ['auth'],
+        summary: 'Register a user',
+        description: 'Registers and saves a user into the database',
+        operationId: 'registerUser',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'user',
+            in: 'body',
+            description: 'user data',
+            required: true,
+            schema: {
+              $ref: '#/definitions/User',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#/definitions/Plant',
+            },
+          },
+          400: {
+            description: 'Invalid ID supplied',
+          },
+          404: {
+            description: 'Plant not found',
+          },
+        },
+        security: [
+          {
+            api_key: [],
+          },
+        ],
+      },
+    },
+    '/auth/login': {
+      post: {
+        tags: ['auth'],
+        summary: 'Login a user',
+        description: 'Logs a user in to the application.',
+        operationId: 'loginUser',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'user',
+            in: 'body',
+            description: 'user data',
+            required: true,
+            schema: {
+              $ref: '#/definitions/User',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#/definitions/Plant',
+            },
+          },
+          400: {
+            description: 'Invalid ID supplied',
+          },
+          404: {
+            description: 'Plant not found',
+          },
+        },
+        security: [
+          {
+            api_key: [],
+          },
+        ],
+      },
+    },
+    '/auth/stats': {
+      get: {
+        tags: ['auth'],
+        summary: 'Gets authentication stats',
+        description: 'Returns a stats about authentication.',
+        operationId: 'getAuthStats',
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#/definitions/Plant',
+            },
+          },
+          400: {
+            description: 'Invalid ID supplied',
+          },
+          404: {
+            description: 'Plant not found',
+          },
+        },
+        security: [
+          {
+            api_key: [],
+          },
+        ],
+      },
+    },
+    '/admin/endpointStats': {
+      get: {
+        tags: ['admin'],
+        summary: 'Gets stats about all endpoints',
+        description: 'Fetches the number of requests for all endpoints.',
+        operationId: 'getEndpointStats',
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#/definitions/Plant',
+            },
+          },
+          400: {
+            description: 'Invalid ID supplied',
+          },
+          404: {
+            description: 'Plant not found',
+          },
+        },
+        security: [
+          {
+            api_key: [],
+          },
+        ],
+      },
+    },
+    '/admin/seedDatabase': {
+      get: {
+        tags: ['admin'],
+        summary: 'Loads the database with sample data',
+        description: 'Saves sample data to the database.',
+        operationId: 'seedDatabase',
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'successful operation',
+            schema: {
+              $ref: '#/definitions/Plant',
+            },
+          },
+          400: {
+            description: 'Invalid ID supplied',
+          },
+          404: {
+            description: 'Plant not found',
           },
         },
         security: [
@@ -466,9 +666,9 @@ const swaggerJSON = {
   },
   securityDefinitions: {
     api_key: {
-      type: "apiKey",
-      name: "api_key",
-      in: "header",
+      type: 'apiKey',
+      name: 'api_key',
+      in: 'header',
     },
   },
   definitions: {
@@ -477,8 +677,8 @@ const swaggerJSON = {
       required: ["name", "id"],
       properties: {
         id: {
-          type: "integer",
-          format: "int64",
+          type: 'integer',
+          format: 'int64',
         },
         name: {
           type: "string",
@@ -507,10 +707,10 @@ const swaggerJSON = {
       },
     },
     ApiResponse: {
-      type: "object",
+      type: 'object',
       properties: {
         message: {
-          type: "string",
+          type: 'string',
         },
       },
     },
