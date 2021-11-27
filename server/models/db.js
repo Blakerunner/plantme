@@ -5,7 +5,7 @@ const MYSQL_DATABASE = process.env.MYSQL_DATABASE || 'plantme';
 const sequelize = new Sequelize(
   MYSQL_DATABASE,
   process.env.MYSQL_USER || 'root',
-  process.env.MYSQL_PASSWORD || 'root',
+  process.env.MYSQL_PASSWORD || '',
   {
     dialect: 'mysql',
     host: process.env.MYSQL_HOST || 'localhost',
