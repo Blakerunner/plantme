@@ -1,32 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 import Button from 'react-bootstrap/Button';
 import './navStyle.css';
 
-const TopNavHomeAdmin = () => {
-  let url = `http://localhost:8080/api/v1/auth/`;
+const TopNavHomeAdmin = ({user}) => {
+  // let url = `http://localhost:8080/api/v1/auth/`;
 
-  const [userId, setUserId] = useState('');
+  // const [userId, setUserId] = useState('');
   const logout = () => {
     localStorage.removeItem('plantme_token');
     sessionStorage.removeItem('plantme_token');
     window.location.reload();
   };
-
-  useEffect(() => {
-    const token = sessionStorage.getItem('plantme_token');
-
-    const config = {
-      headers: { Authorization: `bearer ${token}` },
-    };
-
-    axios.get(url, config).then((response) => {
-      setUserId(response.data);
-    });
-  }, [url]);
 
   return (
     <Navbar className='color-nav' collapseOnSelect expand='lg'>
@@ -50,7 +37,7 @@ const TopNavHomeAdmin = () => {
               API Documentation
             </Nav.Link>
           </Nav>
-          <Nav.Link as={Link} to={`/mypage/${userId.id}`} className='mypage'>
+          <Nav.Link as={Link} to='/mypage' className='mypage'>
             My Page
           </Nav.Link>
           <Button variant='outline-secondary' onClick={logout}>

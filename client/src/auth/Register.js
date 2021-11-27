@@ -60,7 +60,7 @@ const Register = () => {
     const data = { email, password };
 
     try {
-      await axios.post(`http://localhost:8080/api/v1/auth/register`, data);
+      await axios.post(`${REACT_APP_SERVER_URL}/api/v1/auth/register`, data);
       setSuccess(true);
       redirectToLogin();
     } catch (error) {

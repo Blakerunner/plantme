@@ -45,7 +45,7 @@ exports.addMyPlant = async (req, res, next) => {
           Plant.findByPk(plant.id)
             .then((plantLocal) => {
               if (!plantLocal) {
-                res.status(400).send({
+                return res.status(400).send({
                   success: false,
                   message: `Plant Id ${plant.id} does not exist.`,
                   data: {}

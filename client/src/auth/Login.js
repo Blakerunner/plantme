@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import './auth.css';
 import Alert from 'react-bootstrap/Alert';
 
-const Login = ({ loginHandler }) => {
+const Login = ({ loginHandler, setUser }) => {
   const history = useHistory();
   const REACT_APP_SERVER_URL =
     process.env.REACT_APP_SERVER_URL || 'https://plantme.blakerunner.com';
@@ -61,10 +61,14 @@ const Login = ({ loginHandler }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/auth/login`,
+        `${REACT_APP_SERVER_URL}/api/v1/auth/login`,
         data
       );
-      const token = response.data.token;
+      const token = response.data.data.token;
+      setUser({
+        ...response.data.data.user,
+        token
+      });
 
       if (staySignedIn) {
         localStorage.setItem('plantme_token', token);

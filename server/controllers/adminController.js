@@ -13,7 +13,7 @@ const {
 exports.getEndpoint = (req, res, next) => {
   Admin.findAll()
     .then((data) => {
-      res.send({ success: true, message: 'successful operation', data: { stats: data } });
+      return res.send({ success: true, message: 'successful operation', data: { stats: data } });
     })
     .catch((err) => {
       res.status(500).send({

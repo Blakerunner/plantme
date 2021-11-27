@@ -28,7 +28,7 @@ const swaggerJSON = {
   ],
   schemes: ['https'],
   paths: {
-    "/user/me": {
+    "/user": {
       get: {
         tags: ["user"],
         summary: "Gets the current user",
@@ -40,7 +40,8 @@ const swaggerJSON = {
             name: 'api_key',
             in: 'header',
             description: 'User API token',
-            required: true
+            required: true,
+            example: "Bearer eyapitokens3cur3jwttoken"
           },
         ],
         responses: {
@@ -85,8 +86,6 @@ const swaggerJSON = {
           },
         ],
       },
-    },
-    "/user": {
       put: {
         tags: ["user"],
         summary: "Adds a plant to the user's favourites",
@@ -98,7 +97,8 @@ const swaggerJSON = {
             name: 'api_key',
             in: 'header',
             description: 'User API token',
-            required: true
+            required: true,
+            example: "Bearer eyapitokens3cur3jwttoken"
           },
           {
             name: 'plant',
@@ -168,7 +168,8 @@ const swaggerJSON = {
             name: 'api_key',
             in: 'header',
             description: 'User API token',
-            required: true
+            required: true,
+            example: "Bearer eyapitokens3cur3jwttoken"
           },
           {
             name: 'plant',
@@ -650,7 +651,7 @@ const swaggerJSON = {
       },
     },
     '/auth/silentLogin': {
-      post: {
+      get: {
         tags: ['auth'],
         summary: 'Gets user data',
         description: 'Returns the users data. Requires a User API token to produce a successful operation.',
@@ -661,7 +662,8 @@ const swaggerJSON = {
             name: 'api_key',
             in: 'header',
             description: 'User API token',
-            required: true
+            required: true,
+            example: "Bearer eyapitokens3cur3jwttoken"
           },
         ],
         responses: {
@@ -684,7 +686,7 @@ const swaggerJSON = {
                   }
                 }
               }
-            }
+            },
           },
           401: {
             description: 'User does not exist.',

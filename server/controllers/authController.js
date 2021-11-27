@@ -98,7 +98,7 @@ exports.login = (req, res, next) => {
             httpOnly: true,
             maxAge: 1000 * 60 * 60 * 24,
           });
-          res.send({ success: true, message: 'Login Success', user, token }); // need to remove token from send as it is unsecure.
+          res.send({ success: true, message: 'Login Success', data: { user, token } }); // need to remove token from send as it is unsecure.
         } else {
           return res
             .status(403)
@@ -122,9 +122,20 @@ exports.silentLogin = (req, res, next) => {
           .send({ success: false, message: 'User Does Not Exists.', data: {} });
       }
       user.password = null;
+      const token = jwt.sign({ user }, process.env.JSONWEBTOKEN_SECRET, {
+        expiresIn: 60 * 60 * 24,
+        issuer: 'plantme.api',
+      });
+      if (!token) {
+        return res.status(500).send({
+          success: false,
+          message: 'Server Failed to create token',
+          data: {}
+        });
+      }
       return res
         .status(200)
-        .send({ success: true, message: 'Silent Login Success', data: { user } });
+        .send({ success: true, message: 'Silent Login Success', data: { user, token } });
     })
     .catch((err) => {
       return res.status(500).send({ success: false, message: err, data: {} });
