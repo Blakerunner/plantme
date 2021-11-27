@@ -20,12 +20,12 @@ exports.register = (req, res, next) => {
       if (user) {
         return res
           .status(401)
-          .send({ success: false, message: 'User Already Exists.' });
+          .send({ success: false, message: 'User Already Exists.', data: {} });
       } else {
         bcrypt.hash(newUser.password, 8, (err, hashedPassword) => {
           if (err) {
             return res.status(500).send({
-              message: err,
+              success: false, message: err, data: {}
             });
           } else {
             newUser.password = hashedPassword;
@@ -35,17 +35,19 @@ exports.register = (req, res, next) => {
                   '🚀 ~ file: authController.js ~ line 36 ~ .then ~ user',
                   user
                 );
-                return res.send('Register success');
+                return res.send({
+                  success: true, message: 'Register successful', data: {}
+                });
               })
               .catch((err) => {
-                return res.status(500).send({ success: false, message: err });
+                return res.status(500).send({ success: false, message: err, data: {} });
               });
           }
         });
       }
     })
     .catch((err) => {
-      return res.status(500).send({ success: false, message: err });
+      return res.status(500).send({ success: false, message: err, data: {} });
     });
 };
 
@@ -64,12 +66,14 @@ exports.login = (req, res, next) => {
       if (!user) {
         return res
           .status(401)
-          .send({ success: false, message: 'User Does Not Exists.' });
+          .send({ success: false, message: 'User Does Not Exists.', data: {} });
       }
       bcrypt.compare(loginUser.password, user.password, (err, result) => {
         if (err) {
           return res.status(401).json({
+            success: false,
             message: 'Auth failed',
+            data: {}
           });
         }
         if (result) {
@@ -86,6 +90,7 @@ exports.login = (req, res, next) => {
             return res.status(500).send({
               success: false,
               message: 'Server Failed to create token',
+              data: {}
             });
           }
           res.cookie('plantmejwt', token, {
@@ -93,11 +98,11 @@ exports.login = (req, res, next) => {
             httpOnly: true,
             maxAge: 1000 * 60 * 60 * 24,
           });
-          res.send({ success: true, message: 'Login Success', user, token }); // need to remove token from send as it is unsecure.
+          res.send({ success: true, message: 'Login Success', data: { user, token } }); // need to remove token from send as it is unsecure.
         } else {
           return res
             .status(403)
-            .send({ success: false, message: 'Incorrect credentials' });
+            .send({ success: false, message: 'Incorrect credentials', data: {} });
         }
       });
     })
@@ -114,14 +119,25 @@ exports.silentLogin = (req, res, next) => {
       if (!user) {
         return res
           .status(401)
-          .send({ success: false, message: 'User Does Not Exists.' });
+          .send({ success: false, message: 'User Does Not Exists.', data: {} });
       }
       user.password = null;
+      const token = jwt.sign({ user }, process.env.JSONWEBTOKEN_SECRET, {
+        expiresIn: 60 * 60 * 24,
+        issuer: 'plantme.api',
+      });
+      if (!token) {
+        return res.status(500).send({
+          success: false,
+          message: 'Server Failed to create token',
+          data: {}
+        });
+      }
       return res
         .status(200)
-        .send({ success: true, message: 'Silent Login Success', user });
+        .send({ success: true, message: 'Silent Login Success', data: { user, token } });
     })
     .catch((err) => {
-      return res.status(500).send({ success: false, message: err });
+      return res.status(500).send({ success: false, message: err, data: {} });
     });
 };

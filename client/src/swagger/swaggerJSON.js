@@ -10,181 +10,74 @@ const swaggerJSON = {
   basePath: '/api/v1',
   tags: [
     {
-      name: 'plant',
-      description: 'Operations related to plants',
+      name: "plant",
+      description: "Operations related to plants",
     },
     {
-      name: 'user',
-      description: 'Operations related to the user',
+      name: "user",
+      description: "Operations related to the user",
     },
     {
-      name: 'auth',
-      description: 'Operations related to authentication',
+      name: "auth",
+      description: "Operations related to authentication",
     },
     {
-      name: 'admin',
-      description: 'Operations related to admin data',
-    },
+      name: "admin",
+      description: "Operations related to admin data",
+    }
   ],
   schemes: ['https'],
   paths: {
-    '/user/me': {
+    "/user": {
       get: {
-        tags: ['user'],
-        summary: 'Gets the current user',
-        description:
-          "Fetches the current user's information from the database.",
-        operationId: 'getUser',
-        produces: ['application/json'],
-        responses: {
-          200: {
-            description: 'Successful operation',
-            schema: {
-              $ref: '#/definitions/User',
-            },
-          },
-          400: {
-            description: 'Invalid status value',
-          },
-        },
-        security: [
-          {
-            api_key: [],
-          },
-        ],
-      },
-    },
-    '/user': {
-      post: {
-        tags: ['user'],
-        summary: "Adds a plant to the user's favourites",
-        description: "Adds a plant to the user's favourites in the database.",
-        operationId: 'addPlantToFavourites',
-        produces: ['application/json'],
+        tags: ["user"],
+        summary: "Gets the current user",
+        description: "Fetches the current user's information from the database. Requires a User API token to produce a successful operation.",
+        operationId: "getUser",
+        produces: ["application/json"],
         parameters: [
           {
-            name: 'plantId',
-            in: 'path',
-            description: "ID of plant that will be added to user's favourites",
+            name: 'api_key',
+            in: 'header',
+            description: 'User API token',
             required: true,
-            type: 'integer',
-            format: 'int64',
+            example: "Bearer eyapitokens3cur3jwttoken"
           },
         ],
         responses: {
           200: {
             description: 'Successful operation',
             schema: {
-              $ref: '#/definitions/User',
+              $ref: "#/definitions/ApiResponse"
             },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Successful operation.",
+                data: {
+                  user: {
+                    id: 1,
+                    email: "elon@tesla.com",
+                    password: null,
+                    isAdmin: true,
+                    plantList: { ids: [1, 2, 3] }
+                  }
+                }
+              }
+            }
           },
           400: {
-            description: 'Invalid status value',
-          },
-        },
-        security: [
-          {
-            api_key: [],
-          },
-        ],
-      },
-      delete: {
-        tags: ['user'],
-        summary: "Deletes a plant from the user's favourites",
-        description:
-          "Deletes a plant from the user's favourites in the database.",
-        operationId: 'deletePlantFromFavourites',
-        produces: ['application/json'],
-        parameters: [
-          {
-            name: 'plantId',
-            in: 'path',
-            description:
-              "ID of plant that will be removed from user's favourites",
-            required: true,
-            type: 'integer',
-            format: 'int64',
-          },
-        ],
-        responses: {
-          200: {
-            description: 'Successful operation',
+            description: 'Bad request',
             schema: {
-              $ref: '#/definitions/User',
+              $ref: "#/definitions/ApiResponse"
             },
-          },
-          400: {
-            description: 'Invalid status value',
-          },
-        },
-        security: [
-          {
-            api_key: [],
-          },
-        ],
-      },
-    },
-    '/plant': {
-      get: {
-        tags: ['plant'],
-        summary: 'Gets all plants',
-        description: 'Fetches all plants from the database.',
-        operationId: 'getPlants',
-        produces: ['application/json'],
-        responses: {
-          200: {
-            description: 'Successful operation',
-            schema: {
-              type: 'array',
-              items: {
-                $ref: '#/definitions/Plant',
-              },
-            },
-          },
-          400: {
-            description: 'Invalid status value',
-          },
-        },
-        security: [
-          {
-            api_key: [],
-          },
-        ],
-      },
-      post: {
-        tags: ['plant'],
-        summary: 'Create a plant in the database with form data',
-        description: 'Creates a plant.',
-        operationId: 'updatePlantWithForm',
-        consumes: ['application/x-www-form-urlencoded'],
-        produces: ['application/json'],
-        parameters: [
-          {
-            name: 'plantId',
-            in: 'path',
-            description: 'ID of plant that needs to be created',
-            required: true,
-            type: 'integer',
-            format: 'int64',
-          },
-          {
-            name: 'name',
-            in: 'formData',
-            description: 'Created name of the plant',
-            required: false,
-            type: 'string',
-          },
-          {
-            name: 'status',
-            in: 'formData',
-            description: 'Created status of the plant',
-            required: false,
-            type: 'string',
-          },
-        ],
-        responses: {
-          405: {
-            description: 'Invalid input',
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Error message.",
+                data: {}
+              }
+            }
           },
         },
         security: [
@@ -194,33 +87,68 @@ const swaggerJSON = {
         ],
       },
       put: {
-        tags: ['plant'],
-        summary: 'Updates a plant',
-        description: "Updates a plant's field in the database.",
-        operationId: 'updatePlant',
-        produces: ['application/xml', 'application/json'],
+        tags: ["user"],
+        summary: "Adds a plant to the user's favourites",
+        description: "Adds a plant to the user's favourites in the database. Requires a User API token to produce a successful operation.",
+        operationId: "addPlantToFavourites",
+        produces: ["application/json"],
         parameters: [
           {
             name: 'api_key',
             in: 'header',
-            required: false,
-            type: 'string',
+            description: 'User API token',
+            required: true,
+            example: "Bearer eyapitokens3cur3jwttoken"
           },
           {
-            name: 'plantId',
-            in: 'path',
-            description: 'Plant ID to delete',
-            required: true,
-            type: 'integer',
-            format: 'int64',
+            name: 'plant',
+            in: 'body',
+            description: 'Plant containing ID',
+            schema: {
+              $ref: "#/definitions/Plant"
+            },
+            required: true
           },
         ],
         responses: {
-          400: {
-            description: 'Invalid ID supplied',
+          200: {
+            description: "Successful operation or plant already exists",
+            schema: {
+              $ref: "#/definitions/ApiResponse"
+            },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Plant ID has been added to user.",
+                data: {}
+              }
+            }
           },
-          404: {
-            description: 'Plant not found',
+          400: {
+            description: "Bad request",
+            schema: {
+              $ref: "#/definitions/ApiResponse"
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Plant ID does not exist.",
+                data: {}
+              }
+            }
+          },
+          500: {
+            description: "Server error.",
+            schema: {
+              $ref: "#/definitions/ApiResponse"
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Server error or Plant required to create new Plant.",
+                data: {}
+              }
+            }
           },
         },
         security: [
@@ -230,33 +158,55 @@ const swaggerJSON = {
         ],
       },
       delete: {
-        tags: ['plant'],
-        summary: 'Deletes a plant',
-        description: 'Deletes a specified plant from the database.',
-        operationId: 'deletePlant',
-        produces: ['application/json'],
+        tags: ["user"],
+        summary: "Deletes a plant from the user's favourites",
+        description: "Deletes a plant from the user's favourites in the database. Requires a User API token to produce a successful operation.",
+        operationId: "deletePlantFromFavourites",
+        produces: ["application/json"],
         parameters: [
           {
             name: 'api_key',
             in: 'header',
-            required: false,
-            type: 'string',
+            description: 'User API token',
+            required: true,
+            example: "Bearer eyapitokens3cur3jwttoken"
           },
           {
-            name: 'plantId',
-            in: 'path',
-            description: 'Plant ID to delete',
-            required: true,
-            type: 'integer',
-            format: 'int64',
+            name: 'plant',
+            in: 'body',
+            description: 'Plant containing ID',
+            schema: {
+              $ref: "#/definitions/Plant"
+            },
+            required: true
           },
         ],
         responses: {
-          400: {
-            description: 'Invalid ID supplied',
+          200: {
+            description: "Successful operation",
+            schema: {
+              $ref: "#/definitions/ApiResponse"
+            },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "User no longer associated with plant.",
+                data: {}
+              }
+            }
           },
-          404: {
-            description: 'Plant not found',
+          500: {
+            description: "Server error",
+            schema: {
+              $ref: "#/definitions/ApiResponse"
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "No plant reference to delete.",
+                data: {}
+              }
+            }
           },
         },
         security: [
@@ -264,6 +214,227 @@ const swaggerJSON = {
             api_key: [],
           },
         ],
+      },
+    },
+    "/plant": {
+      get: {
+        tags: ["plant"],
+        summary: "Gets all plants",
+        description: "Fetches all plants from the database.",
+        operationId: "getPlants",
+        produces: ["application/json"],
+        responses: {
+          200: {
+            description: "Successful operation",
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Successful operation.",
+                data: {
+                  plants: [
+                    {
+                      id: 1,
+                      name: "Rick Rose"
+                    },
+                    {
+                      id: 2,
+                      name: "Wild Rose"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          500: {
+            description: "Server error",
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Error message.",
+                data: {}
+              }
+            }
+          },
+        },
+      },
+      post: {
+        tags: ['plant'],
+        summary: 'Create a plant in the database with form data',
+        description: 'Creates a plant.',
+        operationId: 'updatePlantWithForm',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'plant',
+            in: 'body',
+            description: 'New plant name',
+            required: false,
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+                example: "Rick Rose"
+              },
+            }
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Successful operation.',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Sucessful operation.",
+                data: {
+                  plant: {
+                    id: 1,
+                    name: "Rick Rose"
+                  }
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Unauthorized error',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Plant already exists",
+                data: {}
+              }
+            }
+          },
+          500: {
+            description: 'Server error',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Error message.",
+                data: {}
+              }
+            }
+          },
+        },
+      },
+      put: {
+        tags: ["plant"],
+        summary: "Updates a plant",
+        description: "Updates a plant's field in the database.",
+        operationId: "updatePlant",
+        produces: ["application/json"],
+        parameters: [
+          {
+            name: 'plant',
+            in: 'body',
+            description: 'Plant to update.',
+            required: true,
+            schema: {
+              $ref: "#/definitions/Plant"
+            }
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Successful operation',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Plant ID updated to ...",
+                data: {}
+              }
+            }
+          },
+          500: {
+            description: 'Server error',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Error message.",
+                data: {}
+              }
+            }
+          },
+        },
+      },
+      delete: {
+        tags: ["plant"],
+        summary: "Deletes a plant",
+        description: "Deletes a specified plant from the database.",
+        operationId: "deletePlant",
+        produces: ["application/json"],
+        parameters: [
+          {
+            name: 'plant',
+            in: 'body',
+            description: 'Plant to delete',
+            required: true,
+            schema: {
+              $ref: "#/definitions/Plant"
+            }
+          },
+        ],
+        responses: {
+          200: {
+            description: "Successful operation.",
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Plant ID deleted.",
+                data: {}
+              }
+            }
+          },
+          400: {
+            description: 'Bad request.',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Plant ID not found.",
+                data: {}
+              }
+            }
+          },
+          500: {
+            description: 'Server error.',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Error message.",
+                data: {}
+              }
+            }
+          },
+        },
       },
     },
     '/plant/{plantId}': {
@@ -287,21 +458,37 @@ const swaggerJSON = {
           200: {
             description: 'successful operation',
             schema: {
-              $ref: '#/definitions/Plant',
+              $ref: '#/definitions/ApiResponse',
             },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Successful operation.",
+                data: {
+                  plant: {
+                    id: 1,
+                    name: "Brandywine Tomato"
+                  }
+                }
+              }
+            }
           },
-          400: {
-            description: 'Invalid ID supplied',
-          },
-          404: {
-            description: 'Plant not found',
-          },
+          401: {
+            description: "Plant ID does not exist",
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Plant ID does not exist.",
+                data: {
+                  err: "Error message"
+                }
+              }
+            }
+          }
         },
-        security: [
-          {
-            api_key: [],
-          },
-        ],
       },
     },
     '/auth/register': {
@@ -313,34 +500,67 @@ const swaggerJSON = {
         produces: ['application/json'],
         parameters: [
           {
-            name: 'user',
+            name: 'email',
             in: 'body',
-            description: 'user data',
+            description: 'User email',
             required: true,
             schema: {
-              $ref: '#/definitions/User',
-            },
+              type: "string",
+              example: "elon@tesla.com"  
+            }
+          },
+          {
+            name: 'password',
+            in: 'body',
+            description: 'User password',
+            required: true,
+            schema: {
+              type: "string",
+              example: "s3cur3p4ssw0rd"
+            }
           },
         ],
         responses: {
           200: {
-            description: 'successful operation',
+            description: 'Successful operation.',
             schema: {
-              $ref: '#/definitions/Plant',
+              $ref: '#/definitions/ApiResponse',
             },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Register successful.",
+                data: {}
+              }
+            }
           },
-          400: {
-            description: 'Invalid ID supplied',
+          401: {
+            description: 'Incomplete request.',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "User already exists.",
+                data: {}
+              }
+            }
           },
-          404: {
-            description: 'Plant not found',
+          500: {
+            description: 'Server error.',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Error message.",
+                data: {}
+              }
+            }
           },
-        },
-        security: [
-          {
-            api_key: [],
-          },
-        ],
+        }
       },
     },
     '/auth/login': {
@@ -352,55 +572,147 @@ const swaggerJSON = {
         produces: ['application/json'],
         parameters: [
           {
-            name: 'user',
+            name: 'email',
             in: 'body',
-            description: 'user data',
+            description: 'User email',
             required: true,
             schema: {
-              $ref: '#/definitions/User',
-            },
+              type: "string",
+              example: "elon@tesla.com"  
+            }
+          },
+          {
+            name: 'password',
+            in: 'body',
+            description: 'User password',
+            required: true,
+            schema: {
+              type: "string",
+              example: "s3cur3p4ssw0rd"
+            }
           },
         ],
         responses: {
           200: {
-            description: 'successful operation',
+            description: 'Successful operation.',
             schema: {
-              $ref: '#/definitions/Plant',
+              $ref: '#/definitions/ApiResponse',
             },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Login success.",
+                data: {
+                  user: {
+                    id: 1,
+                    email: "elon@tesla.com",
+                    password: null,
+                    isAdmin: true,
+                    plantList: { ids: [1, 2, 3] }
+                  }
+                }
+              }
+            }
           },
-          400: {
-            description: 'Invalid ID supplied',
+          401: {
+            description: "Auth failed or User does not exist.",
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Auth failed or User does not exist.",
+                data: {}
+              }
+            }
           },
-          404: {
-            description: 'Plant not found',
+          403: {
+            description: 'Incorrect credentials',
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Incorrect credentials",
+                data: {}
+              }
+            }
           },
-        },
-        security: [
-          {
-            api_key: [],
+          500: {
+            description: 'Incorrect credentials',
+            examples: {
+              "application/json": {
+                success: false,
+                message: 'Server Failed to create token',
+                data: {}
+              }
+            }
           },
-        ],
+        }
       },
     },
-    '/auth/stats': {
+    '/auth/silentLogin': {
       get: {
         tags: ['auth'],
-        summary: 'Gets authentication stats',
-        description: 'Returns a stats about authentication.',
-        operationId: 'getAuthStats',
+        summary: 'Gets user data',
+        description: 'Returns the users data. Requires a User API token to produce a successful operation.',
+        operationId: 'silentLogin',
         produces: ['application/json'],
+        parameters: [
+          {
+            name: 'api_key',
+            in: 'header',
+            description: 'User API token',
+            required: true,
+            example: "Bearer eyapitokens3cur3jwttoken"
+          },
+        ],
         responses: {
           200: {
-            description: 'successful operation',
+            description: 'Silent Login Success.',
             schema: {
-              $ref: '#/definitions/Plant',
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Successful operation.",
+                data: {
+                  user: {
+                    id: 1,
+                    email: "elon@tesla.com",
+                    password: null,
+                    isAdmin: true,
+                    plantList: { ids: [1, 2, 3] }
+                  }
+                }
+              }
             },
           },
-          400: {
-            description: 'Invalid ID supplied',
+          401: {
+            description: 'User does not exist.',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "User does not exist.",
+                data: {}
+              }
+            }
           },
-          404: {
-            description: 'Plant not found',
+          500: {
+            description: 'Internal server error (token is required for authentication).',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Error message.",
+                data: {}
+              }
+            }
           },
         },
         security: [
@@ -414,21 +726,52 @@ const swaggerJSON = {
       get: {
         tags: ['admin'],
         summary: 'Gets stats about all endpoints',
-        description: 'Fetches the number of requests for all endpoints.',
+        description: 'Fetches the number of requests for all endpoints. Requires an Admin API token to produce a successful operation.',
         operationId: 'getEndpointStats',
+        parameters: [
+          {
+            name: 'api_key',
+            in: 'header',
+            description: 'Admin API token',
+            required: true
+          },
+        ],
         produces: ['application/json'],
         responses: {
           200: {
-            description: 'successful operation',
+            description: 'Successful operation.',
             schema: {
-              $ref: '#/definitions/Plant',
+              $ref: '#/definitions/ApiResponse'
             },
+            examples: {
+              "application/json": {
+                success: true,
+                message: "Successful operation.",
+                data: {
+                  stats: [
+                    {
+                      id: 1,
+                      method: "get",
+                      endpoint: "/api/v1/admin/endpointStats",
+                      requests: 1
+                    }
+                  ]
+                }
+              }
+            }
           },
-          400: {
-            description: 'Invalid ID supplied',
-          },
-          404: {
-            description: 'Plant not found',
+          500: {
+            description: 'Internal server error (token is required for authentication).',
+            schema: {
+              $ref: '#/definitions/ApiResponse',
+            },
+            examples: {
+              "application/json": {
+                success: false,
+                message: "Error message.",
+                data: {}
+              }
+            }
           },
         },
         security: [
@@ -447,25 +790,14 @@ const swaggerJSON = {
         produces: ['application/json'],
         responses: {
           200: {
-            description: 'successful operation',
+            description: 'Successful operation.',
             schema: {
-              $ref: '#/definitions/Plant',
+              $ref: '#/definitions/ApiResponse',
             },
-          },
-          400: {
-            description: 'Invalid ID supplied',
-          },
-          404: {
-            description: 'Plant not found',
-          },
-        },
-        security: [
-          {
-            api_key: [],
-          },
-        ],
-      },
-    },
+          }
+        }
+      }
+    }
   },
   securityDefinitions: {
     api_key: {
@@ -476,47 +808,99 @@ const swaggerJSON = {
   },
   definitions: {
     User: {
-      type: 'object',
-      required: ['name', 'id'],
+      type: "object",
+      required: ["email", "password", "isAdmin", "plantList"],
       properties: {
         id: {
           type: 'integer',
           format: 'int64',
+          example: 1
         },
-        name: {
-          type: 'string',
-          example: 'Elon Musk',
+        email: {
+          type: "string",
+          example: "elon@tesla.com",
         },
+        password: {
+          type: "string",
+        },
+        isAdmin: {
+          type: "boolean"
+        },
+        plantList: {
+          type: "object",
+          properties: {
+            ids: {
+              type: "array",
+              items: {
+                type: 'int64'
+              }
+            },
+          },
+          example: { ids: [1, 2, 3] },
+        }
       },
       xml: {
-        name: 'User',
+        name: "User",
       },
     },
     Plant: {
-      type: 'object',
-      required: ['name', 'id'],
+      type: "object",
+      required: ["name"],
       properties: {
         id: {
-          type: 'integer',
-          format: 'int64',
+          type: "integer",
+          format: "int64",
         },
         name: {
-          type: 'string',
-          example: 'Brandywine Tomato',
-        },
+          type: "string",
+          example: "Brandywine Tomato",
+        }
       },
       xml: {
-        name: 'Plant',
+        name: "Plant",
+      },
+    },
+    Admin: {
+      type: "object",
+      required: ["method", "endpoint", "requests"],
+      properties: {
+        id: {
+          type: "integer",
+          format: "int64",
+        },
+        method: {
+          type: "string"
+        },
+        endpoint: {
+          type: "string"
+        },
+        requests: {
+          type: "integer",
+          format: "int64"
+        }
+      },
+      xml: {
+        name: "Admin",
       },
     },
     ApiResponse: {
       type: 'object',
       properties: {
-        message: {
-          type: 'string',
+        success: {
+          type: "boolean"
         },
+        message: {
+          type: "string",
+          example: "Successful operation."
+        },
+        data: {
+          type: "object"
+        }
       },
-    },
+      xml: {
+        name: "ApiResponse",
+      },
+    }
   },
 };
 

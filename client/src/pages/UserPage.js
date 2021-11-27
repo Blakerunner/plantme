@@ -1,30 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 
-const UserPage = () => {
-  const { userId } = useParams();
+const UserPage = ({token}) => {
   const history = useHistory();
 
-  const baseURL = 'http://localhost:8080/api/v1/user';
-  let urlParam = `?id=${userId}`;
-
-  let url = baseURL + urlParam;
+  const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
 
   const [data, setData] = useState(null);
 
+  const deleteItem = async (id) => {
+    axios.delete(`${REACT_APP_SERVER_URL}/api/v1/user`, {
+      headers: {
+        authorization: `Bearer ${token}` 
+      },
+      data: { plant: { id } }
+    })
+    .then((response) => {
+      console.log(response.data.message)
+    })
+    .catch((err) => console.log(err.message));
+  }
+
   useEffect(() => {
-    axios
-      .get(url)
+    if ( token ) {
+      axios(`${REACT_APP_SERVER_URL}/api/v1/user`, {
+        headers: { authorization: `Bearer ${token}` }
+      })
       .then((response) => {
         if (response === null) {
           setData({ plants: [{ id: '1111', name: 'Dummy Plant' }] });
         }
-        setData(response.data);
+        setData(response.data.data.user.Plants);
       })
       .catch((err) => console.log(err.message));
-  }, [url, baseURL]);
+    }
+  }, [token, REACT_APP_SERVER_URL]);
 
   const toMainPage = () => {
     history.push('/');
@@ -41,16 +53,22 @@ const UserPage = () => {
               <th style={{ border: '1px solid black', padding: '5px' }}>
                 Plants
               </th>
+              <th style={{ border: '1px solid black', padding: '5px' }}>
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
-            {data.plants.map((plant, idx) => (
+            {data && data.map((plant, idx) => (
               <tr key={idx}>
                 <td style={{ border: '1px solid black', padding: '5px' }}>
                   {plant.id}
                 </td>
                 <td style={{ border: '1px solid black', padding: '5px' }}>
                   {plant.name}
+                </td>
+                <td style={{ border: '1px solid black', padding: '5px' }}>
+                  <button onClick={() => deleteItem(plant.id)}>Delete</button>
                 </td>
               </tr>
             ))}

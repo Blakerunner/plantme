@@ -10,7 +10,7 @@ authRouter.post('/register', authController.register);
 authRouter.post('/login', authController.login);
 
 // Silent login with a token
-authRouter.post('/silentLogin', authUser, authController.silentLogin);
+authRouter.get('/silentLogin', authUser, authController.silentLogin);
 
 module.exports = {
   authRouter,

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
-const Plants = () => {
+const Plants = ({ auth, token }) => {
   const REACT_APP_SERVER_URL =
     process.env.REACT_APP_SERVER_URL || 'https://plantme.blakerunner.com';
   const history = useHistory({});
@@ -12,7 +12,7 @@ const Plants = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(`${REACT_APP_SERVER_URL}/api/v1/plant`);
-      setPlants(data);
+      setPlants(data.data.plants);
     };
     fetchData();
   }, [REACT_APP_SERVER_URL]);
@@ -22,6 +22,22 @@ const Plants = () => {
     history.push('/');
   };
 
+  const addItem = async (id) => {
+    axios({
+      method: 'put',
+      headers: {
+        authorization: `Bearer ${token}` 
+      },
+      url: `${REACT_APP_SERVER_URL}/api/v1/user`,
+      data: {
+        plant: { id }
+      }
+    }).then((response) => {
+      console.log(response.data.message)
+    })
+    .catch((err) => console.log(err.message));
+  }
+
   return (
     <>
       <table style={{ border: '1px solid black', margin: '5px' }}>
@@ -29,6 +45,11 @@ const Plants = () => {
           <tr>
             <th style={{ border: '1px solid black', padding: '5px' }}>Id</th>
             <th style={{ border: '1px solid black', padding: '5px' }}>Name</th>
+            {
+              auth.isAuthenticated && (
+                <th style={{ border: '1px solid black', padding: '5px' }}>Actions</th>
+              )
+            }
           </tr>
         </thead>
         <tbody>
@@ -40,6 +61,14 @@ const Plants = () => {
               <td style={{ border: '1px solid black', padding: '5px' }}>
                 {plant.name}
               </td>
+              {
+                auth.isAuthenticated && (
+                  <td style={{ border: '1px solid black', padding: '5px' }}>
+                    <button onClick={() => addItem(plant.id)}>Add</button>
+                  </td>
+                )
+              }
+              
             </tr>
           ))}
         </tbody>
