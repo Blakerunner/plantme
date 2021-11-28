@@ -5,13 +5,17 @@ const Plant = db.plant;
 exports.getAll = (req, res, next) => {
   Plant.findAll()
     .then((data) => {
-      res.send({ success: true, message: "Successful operation", data: { plants: data } });
+      res.send({
+        success: true,
+        message: 'Successful operation',
+        data: { plants: data },
+      });
     })
     .catch((err) => {
       res.status(500).send({
         success: false,
         message: err,
-        data: {}
+        data: {},
       });
     });
 };
@@ -21,13 +25,17 @@ exports.getPlantById = (req, res, next) => {
   const id = req.params.id;
   Plant.findByPk(id)
     .then((data) => {
-      res.send({ success: true, message: "Successful operation", data: { plant: data } });
+      res.send({
+        success: true,
+        message: 'Successful operation',
+        data: { plant: data },
+      });
     })
     .catch((err) => {
       res.status(401).send({
         success: false,
         message: `Plant id:${id} does not exist.`,
-        data: { err }
+        data: { err },
       });
     });
 };
@@ -39,7 +47,7 @@ exports.addPlant = (req, res, next) => {
     res.status(500).send({
       success: false,
       message: 'Plant required to create new Plant',
-      data: {}
+      data: {},
     });
   }
   Plant.findOne({
@@ -54,10 +62,16 @@ exports.addPlant = (req, res, next) => {
     } else {
       Plant.create(newPlant)
         .then((plant) => {
-          return res.send({ success: true, message: "Successful operation", data: { plant } });
+          return res.send({
+            success: true,
+            message: 'Successful operation',
+            data: { plant },
+          });
         })
         .catch((err) => {
-          return res.status(500).send({ success: false, message: err, data: {} });
+          return res
+            .status(500)
+            .send({ success: false, message: err, data: {} });
         });
     }
   });
@@ -78,7 +92,7 @@ exports.editPlant = (req, res, next) => {
       res.send({
         success: true,
         message: `Plant Id ${plant.id} updated to ${JSON.stringify(plant)}`,
-        data: {}
+        data: {},
       });
     })
     .catch((err) => {
@@ -96,12 +110,16 @@ exports.deletePlant = (req, res, next) => {
   })
     .then((response) => {
       if (response) {
-        res.send({ success: true, message: `Plant Id ${plant.id} deleted.`, data: {} });
+        res.send({
+          success: true,
+          message: `Plant Id ${plant.id} deleted.`,
+          data: {},
+        });
       } else {
         res.status(400).send({
           success: false,
           message: `Plant Id ${plant.id} not found.`,
-          data: {}
+          data: {},
         });
       }
     })

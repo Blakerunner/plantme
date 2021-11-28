@@ -1,24 +1,12 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
-import { useHistory } from "react-router-dom";
+import React from 'react';
 
 const About = () => {
-  const history = useHistory();
-
-  const toMainPage = (e) => {
-    e.preventDefault();
-    history.push("/");
-  };
-
   return (
-    <div>
-      <h3 style={{ padding: "10px" }}>Author: Blake, Jooney, Tommy, Jieun</h3>
-      <Button
-        variant="secondary"
-        style={{ marginLeft: "10px" }}
-        onClick={(e) => toMainPage(e)}>
-        Back to Landing Page
-      </Button>
+    <div className='container flex-auto text-center my-2'>
+      <div>
+        <h2>Authors</h2>
+        <h3>Blake, Jooney, Tommy, Jieun</h3>
+      </div>
     </div>
   );
 };
