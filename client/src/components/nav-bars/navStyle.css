@@ -122,3 +122,12 @@
   position: relative;
   margin-left: -1rem;
 }
+
+.modal-content {
+  margin: 2px auto;
+  z-index: 1100 !important;
+}
+.modal-backdrop {
+
+  display: none;    
+}

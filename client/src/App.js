@@ -61,7 +61,10 @@ const App = () => {
       <Switch>
         <Route
           path='/'
-          render={() => <div>Welcome to PlantMe</div>}
+          render={() => 
+          <div className="container container-fluid center">
+            <p className="h2">Welcome to PlantMe</p>
+            </div>}
           exact
         />
         <Route
@@ -72,7 +75,7 @@ const App = () => {
         <Route path='/register' component={Register} exact />
         <Route path='/about' component={About} exact />
         <Route path='/plants'>
-          <Plants auth={auth} token={user ? user.token : '' } />
+          <Plants auth={auth} isAdmin={user ? user.isAdmin : false} token={user ? user.token : '' } />
         </Route> 
         <PrivateRoute path='/documentation'>
           <Documentation auth={auth} exact />

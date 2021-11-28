@@ -19,6 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ extended: false }));
 app.use(cookieParser());
 
+// Track and update endpoint admin stats
+app.use(adminController.updateEndpoint);
+
 // CORS
 let whitelist = process.env.WHITELIST.split(',');
 console.log('🚀 ~ file: server.js ~ line 22 ~ whitelist', whitelist);
@@ -39,9 +42,6 @@ let corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-// Track and update endpoint admin stats
-app.use(adminController.updateEndpoint);
 
 // ****** ROUTES ******
 app.use('/api/v1/user', userRouter);

@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useHistory } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
-import Button from "react-bootstrap/Button";
+import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 
 const Admin = ({ isAdmin, token }) => {
   const REACT_APP_SERVER_URL =
-    process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
+    process.env.REACT_APP_SERVER_URL || 'https://plantme.blakerunner.com';
 
   const history = useHistory();
 
@@ -28,56 +29,51 @@ const Admin = ({ isAdmin, token }) => {
         console.log(err);
       }
     };
-    if ( isAdmin ) fetchData();
-  }, [token, REACT_APP_SERVER_URL, isAdmin ]);
+    if (isAdmin) fetchData();
+  }, [token, REACT_APP_SERVER_URL, isAdmin]);
 
   const toMainPage = (e) => {
     e.preventDefault();
-    history.push("/");
+    history.push('/');
   };
 
   return (
     <>
-      { 
-        isAdmin ?  
+      <div className='container flex-auto'>
+        {isAdmin ? (
           <>
-            <table style={{ border: "1px solid black", padding: "5px" }}>
+            <Table>
               <thead>
                 <tr>
-                  <th style={{ border: "1px solid black", padding: "5px" }}>Route</th>
-                  <th style={{ border: "1px solid black", padding: "5px" }}>
-                    Endpoint
-                  </th>
-                  <th style={{ border: "1px solid black", padding: "5px" }}>
-                    Requests
-                  </th>
+                  <th>Route</th>
+                  <th>Endpoint</th>
+                  <th>Requests</th>
                 </tr>
               </thead>
               <tbody>
-                {stats && stats.map((stat, idx) => (
-                  <tr key={idx}>
-                    <td style={{ border: "1px solid black", padding: "5px" }}>
-                      {stat.method}
-                    </td>
-                    <td style={{ border: "1px solid black", padding: "5px" }}>
-                      {stat.endpoint}
-                    </td>
-                    <td style={{ border: "1px solid black", padding: "5px" }}>
-                      {stat.requests}
-                    </td>
-                  </tr>
-                ))}
+                {stats &&
+                  stats.map((stat, idx) => (
+                    <tr key={idx}>
+                      <td>{stat.method}</td>
+                      <td>{stat.endpoint}</td>
+                      <td>{stat.requests}</td>
+                    </tr>
+                  ))}
               </tbody>
-            </table>
+            </Table>
             <Button
-              variant="secondary"
-              style={{ margin: "10px" }}
+              variant='secondary'
+              style={{ margin: '10px' }}
               onClick={(e) => toMainPage(e)}>
               Back
-            </Button>{" "}
+            </Button>{' '}
           </>
-        : 'User not authorized to view admin stats' 
-      }
+        ) : (
+          <>
+            <p className='h2'>You are unauthorized.</p>
+          </>
+        )}
+      </div>
     </>
   );
 };

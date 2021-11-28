@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import Button from 'react-bootstrap/Button';
+import {Button, Table} from 'react-bootstrap';
 
 const UserPage = ({token}) => {
   const history = useHistory();
