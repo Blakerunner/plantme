@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   Modal,
@@ -13,7 +12,6 @@ import {
 const Plants = ({ auth, isAdmin, token }) => {
   const REACT_APP_SERVER_URL =
     process.env.REACT_APP_SERVER_URL || 'https://plantme.blakerunner.com';
-  const history = useHistory({});
   const [plants, setPlants] = useState([]);
   const [plantSelected, setPlantSelected] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);

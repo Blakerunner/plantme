@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
-
-import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 
 const Admin = ({ isAdmin, token }) => {
   const REACT_APP_SERVER_URL =
     process.env.REACT_APP_SERVER_URL || 'https://plantme.blakerunner.com';
-
-  const history = useHistory();
 
   const [stats, setStats] = useState([]);
 
@@ -31,11 +26,6 @@ const Admin = ({ isAdmin, token }) => {
     };
     if (isAdmin) fetchData();
   }, [token, REACT_APP_SERVER_URL, isAdmin]);
-
-  const toMainPage = (e) => {
-    e.preventDefault();
-    history.push('/');
-  };
 
   return (
     <>
