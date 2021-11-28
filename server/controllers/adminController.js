@@ -13,50 +13,42 @@ const {
 exports.getEndpoint = (req, res, next) => {
   Admin.findAll()
     .then((data) => {
-      return res.send({ success: true, message: 'successful operation', data: { stats: data } });
+      return res.send({
+        success: true,
+        message: 'successful operation',
+        data: { stats: data },
+      });
     })
     .catch((err) => {
       res.status(500).send({
         success: false,
         message: err,
-        data: {}
+        data: {},
       });
     });
 };
 
 // update an endpoint we are tracking
-exports.updateEndpoint = (req, res, next) => {
-  const method = req.method;
-  const endpoint = req.url;
-  if (!endpoint == '/api/v1/admin/seedDatabase') {
-    Admin.findOne({
-      where: {
-        method: method,
-        endpoint: endpoint,
-      },
-    })
-      .then((result) => {
-        if (result) {
-          result.increment('requests');
-        } else {
-          Admin.create({ method, endpoint, requests: 1 }).catch((err) => {
-            console.log(
-              '🚀 ~ file: adminController.js ~ line 32 ~ updateEndpoint err',
-              err
-            );
-          });
-        }
-        console.log('Updating admin stats:', method, endpoint);
-        next();
-      })
-      .catch((err) => {
-        console.log(
-          '🚀 ~ file: adminController.js ~ line 32 ~ updateEndpoint err',
-          err
-        );
-        next();
-      });
-  } else {
+exports.updateEndpoint = async (req, res, next) => {
+  try {
+    const method = req.method;
+    const endpoint = req.url;
+    if (endpoint == '/api/v1/admin/seedDatabase' || method == 'OPTIONS') {
+      next();
+    }
+    const admin = await Admin.findOne({ where: { method, endpoint } });
+    if (admin) {
+      admin.increment('requests');
+      admin.save();
+    } else {
+      await Admin.create({ method, endpoint, requests: 1 });
+    }
+    next();
+  } catch (err) {
+    console.log(
+      '🚀 ~ file: adminController.js ~ line 45 ~ exports.updateEndpoint= ~ err',
+      err
+    );
     next();
   }
 };
