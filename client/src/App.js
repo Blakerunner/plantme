@@ -59,7 +59,7 @@ const App = () => {
 
   return (
     <main>
-        <NavbarController auth={auth} user={user} />
+        <NavbarController auth={auth} user={user} loginHandler={setLogin} />
         <Switch>
         <Route path='/' component={Home} exact />
           <Route

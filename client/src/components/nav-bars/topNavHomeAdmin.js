@@ -1,18 +1,18 @@
 import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
+import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import './navStyle.css';
 
-const TopNavHomeAdmin = ({user}) => {
-  // let url = `http://localhost:8080/api/v1/auth/`;
+const TopNavHomeAdmin = ({loginHandler}) => {
+  const history = useHistory();
 
-  // const [userId, setUserId] = useState('');
   const logout = () => {
     localStorage.removeItem('plantme_token');
     sessionStorage.removeItem('plantme_token');
-    window.location.reload();
+    loginHandler(false);
+    history.push('/');
   };
 
   return (

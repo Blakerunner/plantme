@@ -11,6 +11,7 @@ const TopNavHome = () => {
   const goToLogin = () => {
     history.push('/login');
   };
+  
   return (
     <Navbar className='color-nav' collapseOnSelect expand='lg'>
       <Container>
