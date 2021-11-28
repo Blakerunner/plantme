@@ -12,6 +12,7 @@ import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import Documentation from './pages/Documentation';
 import UserPage from './pages/UserPage';
+import Home from './pages/Home';
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -33,61 +34,65 @@ const App = () => {
   }, [login]);
 
   useEffect(() => {
-    if ( user == null ) {
+    if (user == null) {
       const getUser = async () => {
         const token = sessionStorage.getItem('plantme_token');
-        const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
+        const REACT_APP_SERVER_URL =
+          process.env.REACT_APP_SERVER_URL || 'https://plantme.blakerunner.com';
 
         const response = await axios({
           method: 'get',
           headers: {
-            authorization: `Bearer ${token}`
+            authorization: `Bearer ${token}`,
           },
-          url: `${REACT_APP_SERVER_URL}/api/v1/auth/silentLogin`
+          url: `${REACT_APP_SERVER_URL}/api/v1/auth/silentLogin`,
         });
         sessionStorage.setItem('plantme_token', response.data.data.token);
         setUser({
           token: response.data.data.token,
-          ...response.data.data.user
-        })
-      }
+          ...response.data.data.user,
+        });
+      };
       getUser();
     }
   }, [user]);
 
   return (
     <main>
-      <NavbarController auth={auth} user={user} />
-      <Switch>
-        <Route
-          path='/'
-          render={() => 
-          <div className="container container-fluid center">
-            <p className="h2">Welcome to PlantMe</p>
-            </div>}
-          exact
-        />
-        <Route
-          path='/login'
-          render={(props) => <Login {...props} loginHandler={setLogin} setUser={setUser} />}
-          exact
-        />
-        <Route path='/register' component={Register} exact />
-        <Route path='/about' component={About} exact />
-        <Route path='/plants'>
-          <Plants auth={auth} isAdmin={user ? user.isAdmin : false} token={user ? user.token : '' } />
-        </Route> 
-        <PrivateRoute path='/documentation'>
-          <Documentation auth={auth} exact />
-        </PrivateRoute>
-        <PrivateRoute path='/admin'>
-          <Admin auth={auth} isAdmin={user ? user.isAdmin : false} token={user ? user.token : ''} />
-        </PrivateRoute>
-        <PrivateRoute path='/mypage'>
-          <UserPage auth={auth} token={user ? user.token : '' } />
-        </PrivateRoute>
-        <Route component={NotFound} />
-      </Switch>
+        <NavbarController auth={auth} user={user} />
+        <Switch>
+        <Route path='/' component={Home} exact />
+          <Route
+            path='/login'
+            render={(props) => (
+              <Login {...props} loginHandler={setLogin} setUser={setUser} />
+            )}
+            exact
+          />
+          <Route path='/register' component={Register} exact />
+          <Route path='/about' component={About} exact />
+          <Route path='/plants'>
+            <Plants
+              auth={auth}
+              isAdmin={user ? user.isAdmin : false}
+              token={user ? user.token : ''}
+            />
+          </Route>
+          <PrivateRoute path='/documentation'>
+            <Documentation auth={auth} exact />
+          </PrivateRoute>
+          <PrivateRoute path='/admin'>
+            <Admin
+              auth={auth}
+              isAdmin={user ? user.isAdmin : false}
+              token={user ? user.token : ''}
+            />
+          </PrivateRoute>
+          <PrivateRoute path='/mypage'>
+            <UserPage auth={auth} token={user ? user.token : ''} />
+          </PrivateRoute>
+          <Route component={NotFound} />
+        </Switch>
     </main>
   );
 };

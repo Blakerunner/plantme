@@ -33,7 +33,7 @@ exports.updateEndpoint = async (req, res, next) => {
   try {
     const method = req.method;
     const endpoint = req.url;
-    if (endpoint == '/api/v1/admin/seedDatabase') {
+    if (endpoint == '/api/v1/admin/seedDatabase' || method == 'OPTIONS') {
       next();
     }
     const admin = await Admin.findOne({ where: { method, endpoint } });

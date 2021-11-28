@@ -8,7 +8,6 @@ import {
   Form,
   InputGroup,
   FormControl,
-  Row,
 } from 'react-bootstrap';
 
 const Plants = ({ auth, isAdmin, token }) => {
@@ -29,14 +28,14 @@ const Plants = ({ auth, isAdmin, token }) => {
     fetchData();
   }, [REACT_APP_SERVER_URL]);
 
-  const toMainPage = (e) => {
-    e.preventDefault();
-    history.push('/');
-  };
-
   const handleClose = () => {
     setShowEditModal(false);
     setShowCreateModal(false);
+  };
+
+  const updatePlants = async () => {
+    const { data } = await axios.get(`${REACT_APP_SERVER_URL}/api/v1/plant`);
+    setPlants(data.data.plants);
   };
 
   const addItem = async (id) => {
@@ -69,6 +68,7 @@ const Plants = ({ auth, isAdmin, token }) => {
     })
       .then((response) => {
         console.log(response.data.message);
+        updatePlants();
       })
       .catch((err) => console.log(err.message));
   };
@@ -98,6 +98,7 @@ const Plants = ({ auth, isAdmin, token }) => {
     })
       .then((response) => {
         console.log(response.data.message);
+        updatePlants();
       })
       .catch((err) => console.log(err.message));
   };
@@ -117,13 +118,22 @@ const Plants = ({ auth, isAdmin, token }) => {
     })
       .then((response) => {
         console.log(response.data.message);
+        updatePlants();
       })
       .catch((err) => console.log(err.message));
   };
 
   return (
     <>
-      <div className='container px-2'>
+      <div className='container flex-auto text-center my-2'>
+        <h2>Plant Database</h2>
+        {auth.isAuthenticated && (
+          <div>
+            <Button className='my-4' variant='primary' onClick={createItem}>
+              Create New Plant
+            </Button>{' '}
+          </div>
+        )}
         <Table striped border hover>
           <thead>
             <tr>
@@ -168,90 +178,75 @@ const Plants = ({ auth, isAdmin, token }) => {
             ))}
           </tbody>
         </Table>
-        <div>
-          {auth.isAuthenticated && (
-            <td>
-              <Button className='my-4' variant='primary' onClick={createItem}>
-                Create New Plant
-              </Button>{' '}
-            </td>
-          )}
-          <Button
-            variant='secondary'
-            className='px-4 mx-auto'
-            onClick={(e) => toMainPage(e)}>
-            Back
-          </Button>{' '}
-        </div>
+        <Modal
+          className='edit-plant-modal'
+          show={showEditModal}
+          onHide={handleClose}
+          size='lg'>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Plant</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className='mb-3' controlId='plantNameControl'>
+                <InputGroup className='mb-2'>
+                  <InputGroup.Text>Name</InputGroup.Text>
+                  <FormControl
+                    type='text'
+                    onChange={(e) => setModalPlantName(e.target.value)}
+                    defaultValue={plantSelected.name}
+                  />
+                </InputGroup>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='outline-secondary' onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant='outline-warning'
+              type='submit'
+              onClick={onEditFormSubmit}>
+              Submit Edit
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          className='create-plant-modal'
+          show={showCreateModal}
+          onHide={handleClose}
+          size='lg'>
+          <Modal.Header closeButton>
+            <Modal.Title>Create Plant</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className='mb-3' controlId='plantNameControl'>
+                <InputGroup className='mb-2'>
+                  <InputGroup.Text>Name</InputGroup.Text>
+                  <FormControl
+                    type='text'
+                    onChange={(e) => setModalPlantName(e.target.value)}
+                    defaultValue=''
+                  />
+                </InputGroup>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='outline-secondary' onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant='outline-primary'
+              type='submit'
+              onClick={onCreateFormSubmit}>
+              Submit Create
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
-      <Modal
-        className='edit-plant-modal'
-        show={showEditModal}
-        onHide={handleClose}
-        size='lg'>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Plant</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className='mb-3' controlId='plantNameControl'>
-              <InputGroup className='mb-2'>
-                <InputGroup.Text>Name</InputGroup.Text>
-                <FormControl
-                  type='text'
-                  onChange={(e) => setModalPlantName(e.target.value)}
-                  defaultValue={plantSelected.name}
-                />
-              </InputGroup>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant='outline-secondary' onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button
-            variant='outline-warning'
-            type='submit'
-            onClick={onEditFormSubmit}>
-            Submit Edit
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal
-        className='create-plant-modal'
-        show={showCreateModal}
-        onHide={handleClose}
-        size='lg'>
-        <Modal.Header closeButton>
-          <Modal.Title>Create Plant</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className='mb-3' controlId='plantNameControl'>
-              <InputGroup className='mb-2'>
-                <InputGroup.Text>Name</InputGroup.Text>
-                <FormControl
-                  type='text'
-                  onChange={(e) => setModalPlantName(e.target.value)}
-                  defaultValue=''
-                />
-              </InputGroup>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant='outline-secondary' onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button
-            variant='outline-primary'
-            type='submit'
-            onClick={onCreateFormSubmit}>
-            Submit Create
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 };

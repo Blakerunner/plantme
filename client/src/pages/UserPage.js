@@ -1,90 +1,100 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import {Button, Table} from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 
-const UserPage = ({token}) => {
+const UserPage = ({ token }) => {
   const history = useHistory();
 
-  const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL || "https://plantme.blakerunner.com";
+  const REACT_APP_SERVER_URL =
+    process.env.REACT_APP_SERVER_URL || 'https://plantme.blakerunner.com';
 
   const [data, setData] = useState(null);
 
   const deleteItem = async (id) => {
-    axios.delete(`${REACT_APP_SERVER_URL}/api/v1/user`, {
-      headers: {
-        authorization: `Bearer ${token}` 
-      },
-      data: { plant: { id } }
-    })
-    .then((response) => {
-      console.log(response.data.message)
-    })
-    .catch((err) => console.log(err.message));
+    axios
+      .delete(`${REACT_APP_SERVER_URL}/api/v1/user`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        data: { plant: { id } },
+      })
+      .then((response) => {
+        console.log(response.data.message);
+        updateUserPlants();
+      })
+      .catch((err) => console.log(err.message));
+  };
+
+  const updateUserPlants = async () => {
+    if (token) {
+      axios(`${REACT_APP_SERVER_URL}/api/v1/user`, {
+        headers: { authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          if (response === null) {
+            setData({ plants: [{ id: '1111', name: 'Dummy Plant' }] });
+          }
+          setData(response.data.data.user.Plants);
+        })
+        .catch((err) => console.log(err.message));
+    }
   }
 
   useEffect(() => {
-    if ( token ) {
+    if (token) {
       axios(`${REACT_APP_SERVER_URL}/api/v1/user`, {
-        headers: { authorization: `Bearer ${token}` }
+        headers: { authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        if (response === null) {
-          setData({ plants: [{ id: '1111', name: 'Dummy Plant' }] });
-        }
-        setData(response.data.data.user.Plants);
-      })
-      .catch((err) => console.log(err.message));
+        .then((response) => {
+          if (response === null) {
+            setData({ plants: [{ id: '1111', name: 'Dummy Plant' }] });
+          }
+          setData(response.data.data.user.Plants);
+        })
+        .catch((err) => console.log(err.message));
     }
   }, [token, REACT_APP_SERVER_URL]);
-
-  const toMainPage = () => {
-    history.push('/');
-  };
 
   if (data) {
     return (
       <>
-        <h2>Plants Bookmarked</h2>
-        <table style={{ border: '1px solid black', margin: '5px' }}>
-          <thead>
-            <tr>
-              <th style={{ border: '1px solid black', padding: '5px' }}>Id</th>
-              <th style={{ border: '1px solid black', padding: '5px' }}>
-                Plants
-              </th>
-              <th style={{ border: '1px solid black', padding: '5px' }}>
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {data && data.map((plant, idx) => (
-              <tr key={idx}>
-                <td style={{ border: '1px solid black', padding: '5px' }}>
-                  {plant.id}
-                </td>
-                <td style={{ border: '1px solid black', padding: '5px' }}>
-                  {plant.name}
-                </td>
-                <td style={{ border: '1px solid black', padding: '5px' }}>
-                  <button onClick={() => deleteItem(plant.id)}>Delete</button>
-                </td>
+        <div className='container flex-auto text-center my-2'>
+          <h2>Plants Bookmarked</h2>
+          <Table>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Plants</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <Button
-          variant='secondary'
-          style={{ margin: '10px' }}
-          onClick={toMainPage}
-        >
-          Back
-        </Button>{' '}
+            </thead>
+            <tbody>
+              {data &&
+                data.map((plant, idx) => (
+                  <tr key={idx}>
+                    <td>{plant.id}</td>
+                    <td>{plant.name}</td>
+                    <td>
+                      <Button variant="outline-warning" onClick={() => deleteItem(plant.id)}>
+                        Remove
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        </div>
       </>
     );
   } else {
-    return <p>loading...</p>;
+    return (
+      <>
+        <div className='container flex-auto'>
+          <p>loading...</p>
+        </div>
+      </>
+    );
   }
 };
 

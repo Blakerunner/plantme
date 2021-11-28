@@ -39,10 +39,11 @@ const Admin = ({ isAdmin, token }) => {
 
   return (
     <>
-      <div className='container flex-auto'>
+      <div className='container flex-auto text-center my-2'>
         {isAdmin ? (
           <>
-            <Table>
+            <h2>Admin Panel</h2>
+            <Table border hover>
               <thead>
                 <tr>
                   <th>Route</th>
@@ -61,12 +62,6 @@ const Admin = ({ isAdmin, token }) => {
                   ))}
               </tbody>
             </Table>
-            <Button
-              variant='secondary'
-              style={{ margin: '10px' }}
-              onClick={(e) => toMainPage(e)}>
-              Back
-            </Button>{' '}
           </>
         ) : (
           <>
