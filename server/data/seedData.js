@@ -25,12 +25,12 @@ const userData = [
   {
     email: 'user@gmail.com',
     password: '$2b$08$L3IqZnNuDZNifDrjlRmX.up7/RETM3382uM1EqyoAWWsS.lm84z4G',
-  }, //123123
+  },
   {
     email: 'admin@gmail.com',
     password: '$2b$08$ZwojdTVx6/gK34GMQcMmleS2Pb9NxTVULTqbexDX/eHY997PadUDi',
     isAdmin: true,
-  }, //1234abcd
+  },
 ];
 
 const usersplantsData = [

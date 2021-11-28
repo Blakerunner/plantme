@@ -34,7 +34,7 @@ exports.updateEndpoint = async (req, res, next) => {
     const method = req.method;
     const endpoint = req.url;
     if (endpoint == '/api/v1/admin/seedDatabase' || method == 'OPTIONS') {
-      next();
+      return next();
     }
     const admin = await Admin.findOne({ where: { method, endpoint } });
     if (admin) {
@@ -43,13 +43,13 @@ exports.updateEndpoint = async (req, res, next) => {
     } else {
       await Admin.create({ method, endpoint, requests: 1 });
     }
-    next();
+    return next();
   } catch (err) {
     console.log(
       '🚀 ~ file: adminController.js ~ line 45 ~ exports.updateEndpoint= ~ err',
       err
     );
-    next();
+    return next();
   }
 };
 

@@ -2,11 +2,11 @@ import React from 'react';
 import TopNavHome from '../components/nav-bars/topNavHome';
 import TopNavHomeAdmin from '../components/nav-bars/topNavHomeAdmin';
 
-const Home = ({ auth, user }) => {
+const Home = ({ auth, loginHandler }) => {
   if (auth.isAuthenticated) {
     return (
       <div>
-        <TopNavHomeAdmin user={user} />
+        <TopNavHomeAdmin loginHandler={loginHandler} />
       </div>
     );
   }

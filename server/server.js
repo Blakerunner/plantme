@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const adminController = require('./controllers/adminController');
 const { userRouter } = require('./routes/userRouter');
 const { plantRouter } = require('./routes/plantRouter');
@@ -24,7 +24,6 @@ app.use(adminController.updateEndpoint);
 
 // CORS
 let whitelist = process.env.WHITELIST.split(',');
-console.log('🚀 ~ file: server.js ~ line 22 ~ whitelist', whitelist);
 
 let corsOptions = {
   origin: (origin, callback) => {
