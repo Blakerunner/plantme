@@ -11,10 +11,10 @@ plantRouter.get('/:id', plantController.getPlantById);
 // Get plant by id
 plantRouter.post('/', plantController.addPlant);
 
-// Delete plant from user's favorites
+// Edit plant
 plantRouter.put('/', plantController.editPlant);
 
-// Delete plant from user's favorites
+// Delete plant
 plantRouter.delete('/', plantController.deletePlant);
 
 module.exports = {
