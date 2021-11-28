@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Table } from 'react-bootstrap';
 
 const UserPage = ({ token }) => {
-  const history = useHistory();
-
   const REACT_APP_SERVER_URL =
     process.env.REACT_APP_SERVER_URL || 'https://plantme.blakerunner.com';
 
@@ -39,7 +36,7 @@ const UserPage = ({ token }) => {
         })
         .catch((err) => console.log(err.message));
     }
-  }
+  };
 
   useEffect(() => {
     if (token) {
@@ -76,7 +73,9 @@ const UserPage = ({ token }) => {
                     <td>{plant.id}</td>
                     <td>{plant.name}</td>
                     <td>
-                      <Button variant="outline-warning" onClick={() => deleteItem(plant.id)}>
+                      <Button
+                        variant='outline-warning'
+                        onClick={() => deleteItem(plant.id)}>
                         Remove
                       </Button>
                     </td>
